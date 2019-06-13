@@ -5,7 +5,7 @@ import mcapi
 from yaqd_core import hardware
 
 
-class PmcMotorDaemon(hardware.BaseHardwareDaemon):
+class PmcMotorDaemon(hardware.ContinuousHardwareDaemon):
     defaults = {
         "counts_per_mm": 58200,
         "controller": 0,
@@ -79,10 +79,9 @@ class PmcMotorDaemon(hardware.BaseHardwareDaemon):
         while True:
             self._busy = not self.controller.IsStopped(self.axis, 3)
             self._position = self.controller.GetPositionEx(self.axis)
-            if self._busy:
-                await asyncio.sleep(0.01)
-            else:
-                await asyncio.sleep(0.1)
+            _, _, lo, hi = self.controller.GetLimits(self.axis)
+            self._limits = [(lo, hi)]
+            await self._busy.wait()
 
     def stop(self):
         self.ctrl.Stop(self.axis)
