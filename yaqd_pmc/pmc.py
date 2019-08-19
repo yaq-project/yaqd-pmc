@@ -1,11 +1,12 @@
 #! /usr/bin/env python3
 import asyncio
 
-import mcapi
+from . import mcapi
 from yaqd_core import hardware
 
 
 class PmcMotorDaemon(hardware.ContinuousHardwareDaemon):
+    _kind = "pmc"
     defaults = {
         "counts_per_mm": 58200,
         "controller": 0,
