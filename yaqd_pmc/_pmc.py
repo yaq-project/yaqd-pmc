@@ -30,6 +30,7 @@ class PmcMotorDaemon(hardware.ContinuousHardwareDaemon):
         "delay_at_target": 0.0,
         "output_offset": 0.0,
         "output_deadband": 0.0,
+        "units": "mm",
         # "enable_backlash_correction": False,
         # "backlash": 1000,
     }
@@ -41,6 +42,7 @@ class PmcMotorDaemon(hardware.ContinuousHardwareDaemon):
         self.controller.Open(config["controller"], 1)
         self.controller.EnableAxis(self.axis, True)
 
+        self.counts_per_mm = config["counts_per_mm"]
         self.tolerance = config["tolerance"]
         # self.backlash_enabled = config["enable_backlash_correction"]
         # self.backlash = config["backlash"]
@@ -73,7 +75,7 @@ class PmcMotorDaemon(hardware.ContinuousHardwareDaemon):
         return filt
 
     def _set_position(self, position):
-        self.controller.MoveAbsolute(self.axis, position)
+        self.controller.MoveAbsolute(self.axis, self.mm_to_steps(position))
 
     async def update_state(self):
         overflow = b""
@@ -82,7 +84,7 @@ class PmcMotorDaemon(hardware.ContinuousHardwareDaemon):
                 self._not_busy.set()
             else:
                 self._busy.set()
-            self._position = self.controller.GetPositionEx(self.axis)
+            self._position = self.steps_to_mm(self.controller.GetPositionEx(self.axis))
             # _, _, lo, hi = self.controller.GetLimits(self.axis)
             # a = self.controller.GetLimits(self.axis)
             # print(a)
@@ -95,12 +97,18 @@ class PmcMotorDaemon(hardware.ContinuousHardwareDaemon):
     def stop(self):
         self.ctrl.Stop(self.axis)
 
+    def steps_to_mm(self, steps):
+        return 50 - steps / self.counts_per_mm
+
+    def mm_to_steps(self, mm):
+        return round((50 - mm) * self.counts_per_mm)
+
     # Are the following even useful??
     def get_following_error(self):
         return self.controller.GetFollowingError(self.axis)
 
     def get_target(self):
-        return self.controller.GetTargetEx(self.axis)
+        return self.steps_to_mm(self.controller.GetTargetEx(self.axis))
 
     def at_target(self):
         return self.controller.IsAtTarget(self.axis, 3)
