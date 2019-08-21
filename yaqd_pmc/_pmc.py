@@ -1,11 +1,12 @@
 #! /usr/bin/env python3
 import asyncio
 
-import mcapi
+from . import mcapi
 from yaqd_core import hardware
 
 
 class PmcMotorDaemon(hardware.ContinuousHardwareDaemon):
+    _kind = "pmc"
     defaults = {
         "counts_per_mm": 58200,
         "controller": 0,
@@ -37,7 +38,7 @@ class PmcMotorDaemon(hardware.ContinuousHardwareDaemon):
         super().__init__(name, config, config_filepath)
         self.controller = mcapi.Mcapi()
         self.axis = config["axis"]
-        self.controller.open(config["controller"], 1)
+        self.controller.Open(config["controller"], 1)
         self.controller.EnableAxis(self.axis, True)
 
         self.tolerance = config["tolerance"]
@@ -56,15 +57,15 @@ class PmcMotorDaemon(hardware.ContinuousHardwareDaemon):
         filt.Gain = config["gain"]
         filt.IntegralGain = config["integral_gain"]
         filt.IntegrationLimit = config["integration_limit"]
-        filt.IntegralOption = config["integral_option"]
+        filt.IntegralOption = config["integration_option"]
         filt.DerivativeGain = config["derivative_gain"]
         filt.DerSamplePeriod = config["derivative_sample"]
-        filt.FollowingError = config["following_errof"]
+        filt.FollowingError = config["following_error"]
         filt.VelocityGain = config["velocity_gain"]
         filt.AccelGain = config["accel_gain"]
         filt.DecelGain = config["decel_gain"]
         filt.EncoderScaling = config["encoder_scaling"]
-        filt.UpdateRate = config["update_rate"]
+        filt.UpdateRate = int(config["update_rate"])
         filt.PositionDeadband = config["position_deadband"]
         filt.DelayAtTarget = config["delay_at_target"]
         filt.OutputOffset = config["output_offset"]
@@ -77,23 +78,32 @@ class PmcMotorDaemon(hardware.ContinuousHardwareDaemon):
     async def update_state(self):
         overflow = b""
         while True:
-            self._busy = not self.controller.IsStopped(self.axis, 3)
+            if self.controller.IsStopped(self.axis, 3):
+                self._not_busy.set()
+            else:
+                self._busy.set()
             self._position = self.controller.GetPositionEx(self.axis)
-            _, _, lo, hi = self.controller.GetLimits(self.axis)
-            self._limits = [(lo, hi)]
-            await self._busy.wait()
+            # _, _, lo, hi = self.controller.GetLimits(self.axis)
+            # a = self.controller.GetLimits(self.axis)
+            # print(a)
+            # self._limits = [(lo, hi)]
+            try:
+                await asyncio.wait_for(self._busy.wait(), 0.1)
+            except asyncio.TimeoutError:
+                pass
 
     def stop(self):
         self.ctrl.Stop(self.axis)
 
-    def get_FollowingError(self):
-        return self.ctrl.GetFollowingError(self.axis)
+    # Are the following even useful??
+    def get_following_error(self):
+        return self.controller.GetFollowingError(self.axis)
 
     def get_target(self):
-        return self.ctrl.GetTargetEx(self.axis)
+        return self.controller.GetTargetEx(self.axis)
 
     def at_target(self):
-        return self.ctrl.IsAtTarget(self.axis, 3)
+        return self.controller.IsAtTarget(self.axis, 3)
 
 
 if __name__ == "__main__":
