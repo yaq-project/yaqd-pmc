@@ -80,17 +80,14 @@ class PmcMotorDaemon(hardware.ContinuousHardwareDaemon):
     async def update_state(self):
         overflow = b""
         while True:
-            if self.controller.IsStopped(self.axis, 3):
-                self._not_busy.set()
-            else:
-                self._busy.set()
             self._position = self.steps_to_mm(self.controller.GetPositionEx(self.axis))
+            self._busy = abs(self.mm_to_steps(self._position) - self.mm_to_steps(self._destination)) > self.tolerance
             # _, _, lo, hi = self.controller.GetLimits(self.axis)
             # a = self.controller.GetLimits(self.axis)
             # print(a)
             # self._limits = [(lo, hi)]
             try:
-                await asyncio.wait_for(self._busy.wait(), 0.1)
+                await asyncio.wait_for(self._busy_sig.wait(), 0.1)
             except asyncio.TimeoutError:
                 pass
 
