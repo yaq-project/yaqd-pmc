@@ -81,7 +81,10 @@ class PmcMotorDaemon(hardware.ContinuousHardwareDaemon):
         overflow = b""
         while True:
             self._position = self.steps_to_mm(self.controller.GetPositionEx(self.axis))
-            self._busy = abs(self.mm_to_steps(self._position) - self.mm_to_steps(self._destination)) > self.tolerance
+            self._busy = (
+                abs(self.mm_to_steps(self._position) - self.mm_to_steps(self._destination))
+                > self.tolerance
+            )
             # _, _, lo, hi = self.controller.GetLimits(self.axis)
             # a = self.controller.GetLimits(self.axis)
             # print(a)
@@ -99,6 +102,10 @@ class PmcMotorDaemon(hardware.ContinuousHardwareDaemon):
 
     def mm_to_steps(self, mm):
         return round((50 - mm) * self.counts_per_mm)
+
+    def reset_to_known_position(self, position):
+        self.controller.SetPosition(self.axis, self.mm_to_steps(position))
+        self._destination = position
 
     # Are the following even useful??
     def get_following_error(self):
