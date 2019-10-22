@@ -2,10 +2,10 @@
 import asyncio
 
 from . import mcapi
-from yaqd_core import hardware
+import yaqd_core
 
 
-class PmcMotorDaemon(hardware.ContinuousHardwareDaemon):
+class PmcMotor(yaqd_core.ContinuousHardware):
     _kind = "pmc"
     defaults = {
         "counts_per_mm": 58200,
@@ -119,4 +119,4 @@ class PmcMotorDaemon(hardware.ContinuousHardwareDaemon):
 
 
 if __name__ == "__main__":
-    PmcMotorDaemon.main()
+    PmcMotor.main()
