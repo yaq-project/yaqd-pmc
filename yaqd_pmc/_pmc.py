@@ -1,12 +1,17 @@
-#! /usr/bin/env python3
+__all__ = ["PmcMotor"]
+
 import asyncio
+from typing import Dict, Any, List
 
+from yaqd_core import ContinuousHardware
+
+from .__version__ import __branch__
 from . import mcapi
-import yaqd_core
 
 
-class PmcMotor(yaqd_core.ContinuousHardware):
+class PmcMotor(ContinuousHardware):
     _kind = "pmc"
+    _version = "0.1.0" + f"+{__branch__}" if __branch__ else ""
     defaults = {
         "counts_per_mm": 58200,
         "controller": 0,
@@ -116,7 +121,3 @@ class PmcMotor(yaqd_core.ContinuousHardware):
 
     def at_target(self):
         return self.controller.IsAtTarget(self.axis, 3)
-
-
-if __name__ == "__main__":
-    PmcMotor.main()
