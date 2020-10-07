@@ -3,6 +3,7 @@ doc = """
 Motor driver for motors from Precision MicroControl Corporation.
 """
 traits = ["has-limits", "is-homeable", "is-daemon"]
+hardware = ["pmc:dcx-pci100"]
 
 [links]
 source = "https://gitlab.com/yaq/yaqd-pmc/"

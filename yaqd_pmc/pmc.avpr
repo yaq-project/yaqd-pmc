@@ -163,6 +163,9 @@
         }
     },
     "doc": "Motor driver for motors from Precision MicroControl Corporation.\n",
+    "hardware": [
+        "pmc:dcx-pci100"
+    ],
     "installation": {
         "PyPI": "https://pypi.org/project/yaqd-pmc"
     },
@@ -314,8 +317,6 @@
             "response": "null"
         }
     },
-    "name": "is-homeable",
-    "protcol": "has-position",
     "protocol": "pmc",
     "requires": [],
     "state": {
@@ -336,10 +337,39 @@
             "type": "float"
         }
     },
+    "trait": "has-position",
     "traits": [
-        "is-homeable",
+        "is-daemon",
         "has-limits",
         "has-position",
-        "is-daemon"
+        "is-homeable"
+    ],
+    "types": [
+        {
+            "fields": [
+                {
+                    "name": "shape",
+                    "type": {
+                        "items": "int",
+                        "type": "array"
+                    }
+                },
+                {
+                    "name": "typestr",
+                    "type": "string"
+                },
+                {
+                    "name": "data",
+                    "type": "bytes"
+                },
+                {
+                    "name": "version",
+                    "type": "int"
+                }
+            ],
+            "logicalType": "ndarray",
+            "name": "ndarray",
+            "type": "record"
+        }
     ]
 }
