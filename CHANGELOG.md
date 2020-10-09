@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Fixed
+- Spelling of `reset_to_known_position`
+
 ## [2020.07.0]
 
 ### Changed
