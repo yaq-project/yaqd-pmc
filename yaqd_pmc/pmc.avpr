@@ -258,7 +258,7 @@
             ],
             "response": "int"
         },
-        "reset_to_known_postion": {
+        "reset_to_known_position": {
             "doc": "Reset the represented position to a known actual position",
             "request": [
                 {
@@ -341,8 +341,8 @@
     "traits": [
         "is-daemon",
         "has-limits",
-        "has-position",
-        "is-homeable"
+        "is-homeable",
+        "has-position"
     ],
     "types": [
         {

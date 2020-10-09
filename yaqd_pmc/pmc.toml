@@ -98,7 +98,7 @@ hw_limits.default = [0, 50]
   response = "int"
   doc = "Convert mm travel to motor steps"
 
-  [messages.reset_to_known_postion]
+  [messages.reset_to_known_position]
   request = [{"type"="float", "name"="position", "doc"="Current actual position in mm"}]
   doc = "Reset the represented position to a known actual position"
 
