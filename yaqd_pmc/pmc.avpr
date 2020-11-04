@@ -361,10 +361,10 @@
         }
     },
     "traits": [
-        "is-daemon",
-        "has-position",
         "is-homeable",
-        "has-limits"
+        "is-daemon",
+        "has-limits",
+        "has-position"
     ],
     "types": [
         {
