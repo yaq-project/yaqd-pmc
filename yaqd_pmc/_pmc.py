@@ -10,6 +10,7 @@ from . import mcapi
 
 class PmcMotor(ContinuousHardware):
     _kind = "pmc"
+
     def __init__(self, name, config, config_filepath):
         super().__init__(name, config, config_filepath)
         self.controller = mcapi.Mcapi()
@@ -57,7 +58,10 @@ class PmcMotor(ContinuousHardware):
         while True:
             self._state["position"] = self.steps_to_mm(self.controller.GetPositionEx(self.axis))
             self._busy = (
-                abs(self.mm_to_steps(self._state["position"]) - self.mm_to_steps(self._state["destination"]))
+                abs(
+                    self.mm_to_steps(self._state["position"])
+                    - self.mm_to_steps(self._state["destination"])
+                )
                 > self.tolerance
             )
             try:
