@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Changelog
 - regenerated avpr based on recent traits update
+- remove is-homeable trait
 
 ## [2020.10.0]
 
