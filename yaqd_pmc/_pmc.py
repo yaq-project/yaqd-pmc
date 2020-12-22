@@ -30,6 +30,9 @@ class PmcMotor(ContinuousHardware):
         self.controller.SetGain(self.axis, config["gain"])
         self.controller.SetVelocity(self.axis, config["velocity"])
 
+        if config["startup_behavior"] == "trust_state":
+            self.reset_to_known_position(self._state["position"])
+
     def _get_filter(self, config):
         filt = mcapi.MCFILTEREX()
         filt.Gain = config["gain"]
