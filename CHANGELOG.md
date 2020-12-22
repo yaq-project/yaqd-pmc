@@ -5,12 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [2020.12.0]
+
 ### Added
 - option `startup_behavior` which allows you to trust the state over the driver
 
 ## [2020.11.0]
 
-### Changelog
+### Updated
 - regenerated avpr based on recent traits update
 - remove is-homeable trait
 
@@ -30,7 +32,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - initial release
 
-[Unreleased]: https://gitlab.com/yaq/yaqd-pmc/-/compare/v2020.11.0...master
+[Unreleased]: https://gitlab.com/yaq/yaqd-pmc/-/compare/v2020.12.0...master
+[2020.12.0]: https://gitlab.com/yaq/yaqd-pmc/-/compare/v2020.11.0...v2020.12.0
 [2020.11.0]: https://gitlab.com/yaq/yaqd-pmc/-/compare/v2020.10.0...v2020.11.0
 [2020.10.0]: https://gitlab.com/yaq/yaqd-pmc/-/compare/v2020.07.0...v2020.10.0
 [2020.07.0]: https://gitlab.com/yaq/yaqd-pmc/-/compare/v2020.05.0...v2020.07.0
