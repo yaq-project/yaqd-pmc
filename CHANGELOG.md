@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added
+- option `startup_behavior` which allows you to trust the state over the driver
+
 ## [2020.11.0]
 
 ### Changelog

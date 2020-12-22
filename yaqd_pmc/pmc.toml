@@ -80,6 +80,9 @@ output_deadband.doc = "Output Deadband"
 units.type = "string"
 units.default = "mm"
 units.doc = "Units"
+startup_behavior.type = {type="enum", symbols=["trust_driver", "trust_state"], name="startup"}
+startup_behavior.default = "trust_driver"
+startup_behavior.doc = "Where to get the current position. If trust state, then it will use the position stored to state (if present)"
 
 [state]
 hw_limits.default = [0, 50]
