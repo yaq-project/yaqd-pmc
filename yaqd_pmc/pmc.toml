@@ -107,4 +107,5 @@ hw_limits.default = [0, 50]
 
 [installation]
 PyPI = "https://pypi.org/project/yaqd-pmc"
+conda-forge = "https://anaconda.org/conda-forge/yaqd-pmc"
 
