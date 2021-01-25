@@ -19,6 +19,7 @@ class PmcMotor(ContinuousHardware):
         self.controller.EnableAxis(self.axis, True)
 
         self.counts_per_mm = config["counts_per_mm"]
+        self._units = config["units"]
         self.tolerance = config["tolerance"]
         # self.backlash_enabled = config["enable_backlash_correction"]
         # self.backlash = config["backlash"]
