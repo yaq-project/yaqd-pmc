@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - conda-forge as installation source
 
+### Fixed
+- Set units
+
 ## [2020.12.0]
 
 ### Added
