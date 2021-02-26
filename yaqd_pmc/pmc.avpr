@@ -45,6 +45,12 @@
             "doc": "Derivative Sample",
             "type": "float"
         },
+        "enable": {
+            "default": true,
+            "doc": "Disable this daemon. The kind entry-point will not attempt to start this daemon.",
+            "origin": "is-daemon",
+            "type": "boolean"
+        },
         "encoder_scaling": {
             "default": 0,
             "doc": "Encoder Scaling",
@@ -84,6 +90,31 @@
             "items": "double",
             "origin": "has-limits",
             "type": "array"
+        },
+        "log_level": {
+            "default": "info",
+            "doc": "Set daemon log-level.",
+            "origin": "is-daemon",
+            "type": {
+                "name": "level",
+                "symbols": [
+                    "debug",
+                    "info",
+                    "notice",
+                    "warning",
+                    "error",
+                    "critical",
+                    "alert",
+                    "emergency"
+                ],
+                "type": "enum"
+            }
+        },
+        "log_to_file": {
+            "default": false,
+            "doc": "Optionally force logging to a file.",
+            "origin": "is-daemon",
+            "type": "boolean"
         },
         "make": {
             "default": null,
@@ -181,6 +212,43 @@
         }
     },
     "doc": "Motor driver for motors from Precision MicroControl Corporation.\n",
+    "fields": {
+        "destination": {
+            "fields": {
+                "dynamic": true,
+                "getter": "get_destination",
+                "kind": "normal",
+                "type": "double"
+            },
+            "name": "field",
+            "type": "record"
+        },
+        "limits": {
+            "fields": {
+                "dynamic": true,
+                "getter": "get_limits",
+                "kind": "normal",
+                "type": {
+                    "items": "double",
+                    "type": "array"
+                }
+            },
+            "name": "field",
+            "type": "record"
+        },
+        "origin": "has-position",
+        "position": {
+            "fields": {
+                "dynamic": true,
+                "getter": "get_position",
+                "kind": "hinted",
+                "setter": "set_position",
+                "type": "double"
+            },
+            "name": "field",
+            "type": "record"
+        }
+    },
     "hardware": [
         "pmc:dcx-pci100"
     ],
@@ -369,8 +437,8 @@
     },
     "traits": [
         "has-limits",
-        "is-daemon",
-        "has-position"
+        "has-position",
+        "is-daemon"
     ],
     "types": [
         {
