@@ -872,7 +872,7 @@ class Mcapi:
     def ConfigureCompare(self, axis, values, num, inc, mode, period):
         """Configure axis high-speed position compare mode operation
 
-		Declare 'values' as values = c_double * n"""
+        Declare 'values' as values = c_double * n"""
         self.ProcessException(
             self._dll.MCConfigureCompare(self._handle, axis, values, num.inc, mode, period)
         )
@@ -1018,7 +1018,7 @@ class Mcapi:
     def GetCaptureSettings(self, axis):
         """Get the current data recording settings for axis.
 
-		Returns settings as tuple: (points, period, delay, index)"""
+        Returns settings as tuple: (points, period, delay, index)"""
         points = c_int()
         period = c_double()
         delay = c_double()
@@ -1040,8 +1040,8 @@ class Mcapi:
     def GetCount(self, axis, type):
         """Get various count values for axis.
 
-		type is one of type MC_COUNT_CAPTURE, MC_COUNT_COMPARE, MC_COUNT_CONTOUR,
-		MC_COUNT_FILTER, MC_COUNT_FILTERMAX, or MC_COUNT_RECORD"""
+        type is one of type MC_COUNT_CAPTURE, MC_COUNT_COMPARE, MC_COUNT_CONTOUR,
+        MC_COUNT_FILTER, MC_COUNT_FILTERMAX, or MC_COUNT_RECORD"""
         count = c_int(0)
         self.ProcessException(self._dll.MCGetCount(self._handle, axis, type, count))
         return count.value
@@ -1113,7 +1113,7 @@ class Mcapi:
     def GetLimits(self, axis):
         """Get the current hard and soft limit settings for axis.
 
-		Returns settings as tuple: (hardlimitmode, softlimitmode, softlimitminus, softlimitplus)"""
+        Returns settings as tuple: (hardlimitmode, softlimitmode, softlimitminus, softlimitplus)"""
         hardlimitmode = c_short(0)
         softlimitmode = c_short(0)
         softlimitminus = c_double(0)
@@ -1609,7 +1609,7 @@ class Mcapi:
     def pmcputs(self, buffer):
         """Write a NULL terminated command string to the controller ASCII interface.
 
-		command buffer must be of type byte, e.g. b'TC\r'"""
+        command buffer must be of type byte, e.g. b'TC\r'"""
         count = self._dll.pmcputs(self._handle, buffer)
         self.ProcessException()
         return count
