@@ -856,7 +856,7 @@ class Mcapi:
         return task.value
 
     def CancelTask(self, task):
-        """Cancel executing background task on a multi-tasking controller. """
+        """Cancel executing background task on a multi-tasking controller."""
         self.ProcessException(self._dll.MCCancelTask(self._handle, task))
 
     def CaptureData(self, axis, points, period, delay):
