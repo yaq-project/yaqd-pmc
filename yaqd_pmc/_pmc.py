@@ -21,9 +21,10 @@ class PmcMotor(ContinuousHardware):
         self.counts_per_mm = config["counts_per_mm"]
         self._units = config["units"]
         self.tolerance = config["tolerance"]
-        # self.backlash_enabled = config["enable_backlash_correction"]
-        # self.backlash = config["backlash"]
-        # self.backlashing = False
+        self.backlash_enabled = config["enable_backlash_correction"]
+        self.backlash = config["backlash"]
+        self.backlash_done = asyncio.Event()
+        self.backlash_done.set()
 
         self.filter = self._get_filter(config)
         self.controller.SetFilterConfigEx(self.axis, self.filter)
@@ -55,19 +56,41 @@ class PmcMotor(ContinuousHardware):
         return filt
 
     def _set_position(self, position):
+        self._loop.create_task(self._set_position_internal(position))
+
+    async def _set_position_internal(self, position):
+        new_pos_steps = self.mm_to_steps(position)
+        cur_pos_steps = self.controller.GetPositionEx(self.axis)
+        if self.backlash_enabled and new_pos_steps < cur_pos_steps:
+            self.backlash_done.clear()
+            self.controller.MoveAbsolute(self.axis, new_pos_steps - self.backlash)
+            await self.backlash_done.wait()
         self.controller.MoveAbsolute(self.axis, self.mm_to_steps(position))
 
     async def update_state(self):
         self._state["hw_limits"] = (0, 50)
         while True:
             self._state["position"] = self.steps_to_mm(self.controller.GetPositionEx(self.axis))
-            self._busy = (
-                abs(
-                    self.mm_to_steps(self._state["position"])
-                    - self.mm_to_steps(self._state["destination"])
+            if self.backlash_done.is_set():
+                self._busy = (
+                    abs(
+                        self.mm_to_steps(self._state["position"])
+                        - self.mm_to_steps(self._state["destination"])
+                    )
+                    > self.tolerance
                 )
-                > self.tolerance
-            )
+            else:
+                self._busy = True
+                within_tol = (
+                    abs(
+                        self.mm_to_steps(self._state["position"])
+                        - self.mm_to_steps(self._state["destination"])
+                        + self.backlash
+                    )
+                    < self.tolerance
+                )
+                if within_tol:
+                    self.backlash_done.set()
             try:
                 await asyncio.wait_for(self._busy_sig.wait(), 0.1)
             except asyncio.TimeoutError:
