@@ -84,6 +84,14 @@ startup_behavior.type = {type="enum", symbols=["trust_driver", "trust_state"], n
 startup_behavior.default = "trust_driver"
 startup_behavior.doc = "Where to get the current position. If trust state, then it will use the position stored to state (if present)"
 
+enable_backlash_correction.type = "boolean"
+enable_backlash_correction.default = false
+enable_backlash_correction.doc = "Enable correction which sends the motor past its destination when travelling to higher mm values (lower step values)"
+
+backlash.type = "int"
+backlash.default = 1000
+backlash.doc = "Number of steps to exceed the destination when backlash correcting. Must be a positive integer as backlash correction only applies in one direction."
+
 [state]
 hw_limits.default = [0, 50]
 
