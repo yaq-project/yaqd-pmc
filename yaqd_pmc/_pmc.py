@@ -97,7 +97,7 @@ class PmcMotor(ContinuousHardware):
                 pass
 
     def stop(self):
-        self.ctrl.Stop(self.axis)
+        self.controller.Stop(self.axis)
 
     def steps_to_mm(self, steps):
         return self._state["hw_limits"][1] - steps / self.counts_per_mm
