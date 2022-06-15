@@ -12,3 +12,7 @@ yaq daemons for Precision MicroControl Corp. hardware
 This package contains the following daemon(s):
 
 - https://yaq.fyi/daemons/pmc
+
+## maintainers
+
+- [Kent Meyer](https://github.com/kameyer226)
