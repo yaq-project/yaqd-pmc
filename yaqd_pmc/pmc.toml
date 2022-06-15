@@ -6,8 +6,8 @@ traits = ["has-limits", "is-daemon"]
 hardware = ["pmc:dcx-pci100"]
 
 [links]
-source = "https://gitlab.com/yaq/yaqd-pmc/"
-bugtracker = "https://gitlab.com/yaq/yaqd-pmc/issues"
+source = "https://github.com/yaq-project/yaqd-pmc/"
+bugtracker = "https://github.com/yaq-project/yaqd-pmc/issues"
 manufacturer = "https://pmccorp.com/products/api.php"
 
 [config]
