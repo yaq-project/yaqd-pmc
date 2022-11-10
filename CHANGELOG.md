@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - example configs
 
+## [2022.6.0]
+
+- migrated to Github
+
 ## [2022.3.0]
 
 ### Fixed
