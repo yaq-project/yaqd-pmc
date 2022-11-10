@@ -5,9 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [2022.11.0]
+
+### Added
+- example configs
+
 ## [2022.6.0]
 
-### Changed
 - migrated to Github
 
 ## [2022.3.0]
@@ -58,14 +62,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - initial release
 
-[Unreleased]: https://github.com/yaq-project/yaqd-pmc/compare/v2022.6.0...main
-[2022.6.0]: https://github.com/yaq-project/yaqd-pmc/compare/v2022.6.0...v2022.3.0
-[2022.3.0]: https://github.com/yaq-project/yaqd-pmc/compare/v2022.2.0...v2022.3.0
-[2022.2.0]: https://github.com/yaq-project/yaqd-pmc/compare/v2021.10.0...v2022.2.0
-[2021.10.0]: https://github.com/yaq-project/yaqd-pmc/compare/v2021.1.0...v2021.10.0
-[2021.1.0]: https://github.com/yaq-project/yaqd-pmc/compare/v2020.12.0...v2021.1.0
-[2020.12.0]: https://github.com/yaq-project/yaqd-pmc/compare/v2020.11.0...v2020.12.0
-[2020.11.0]: https://github.com/yaq-project/yaqd-pmc/compare/v2020.10.0...v2020.11.0
-[2020.10.0]: https://github.com/yaq-project/yaqd-pmc/compare/v2020.07.0...v2020.10.0
-[2020.07.0]: https://github.com/yaq-project/yaqd-pmc/compare/v2020.05.0...v2020.07.0
-[2020.05.0]: https://github.com/yaq-project/yaqd-pmc/releases/tag/v2020.05.0
+[Unreleased]: https://github.com/yaq-project/yaqd-pmc/-/compare/v2022.11.0...main
+[2022.11.0]: https://github.com/yaq-project/yaqd-pmc/-/compare/v2022.3.0...v2022.11.0
+[2022.3.0]: https://github.com/yaq-project/yaqd-pmc/-/compare/v2022.2.0...v2022.3.0
+[2022.2.0]: https://github.com/yaq-project/yaqd-pmc/-/compare/v2021.10.0...v2022.2.0
+[2021.10.0]: https://github.com/yaq-project/yaqd-pmc/-/compare/v2021.1.0...v2021.10.0
+[2021.1.0]: https://github.com/yaq-project/yaqd-pmc/-/compare/v2020.12.0...v2021.1.0
+[2020.12.0]: https://github.com/yaq-project/yaqd-pmc/-/compare/v2020.11.0...v2020.12.0
+[2020.11.0]: https://github.com/yaq-project/yaqd-pmc/-/compare/v2020.10.0...v2020.11.0
+[2020.10.0]: https://github.com/yaq-project/yaqd-pmc/-/compare/v2020.07.0...v2020.10.0
+[2020.07.0]: https://github.com/yaq-project/yaqd-pmc/-/compare/v2020.05.0...v2020.07.0
+[2020.05.0]: https://github.com/yaq-project/yaqd-pmc/-/tags/v2020.05.0

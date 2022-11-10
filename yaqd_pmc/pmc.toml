@@ -3,12 +3,13 @@ doc = """
 Motor driver for motors from Precision MicroControl Corporation.
 """
 traits = ["has-limits", "is-daemon"]
-hardware = ["pmc:dcx-pci100"]
+hardware = ["pmc:dcx-pci100", "pmc:dcx-mc110"]
 
 [links]
 source = "https://github.com/yaq-project/yaqd-pmc/"
 bugtracker = "https://github.com/yaq-project/yaqd-pmc/issues"
 manufacturer = "https://pmccorp.com/products/api.php"
+example-configs = "https://github.com/yaq-project/yaqd-pmc/tree/main/example-yaq-configs/pmc"
 
 [config]
 counts_per_mm.type = "int"
