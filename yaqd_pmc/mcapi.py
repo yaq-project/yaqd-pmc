@@ -358,6 +358,7 @@ MCERR_SOCKET = 32  # Error code:  tcp/ip socket error, MCERRMASK_IO group.
 # controller handle type
 HCTRLR = c_short
 
+
 #
 # Axis configuration structure
 #
