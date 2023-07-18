@@ -142,6 +142,16 @@
                 "string"
             ]
         },
+        "native_limits": {
+            "default": [
+                -Infinity,
+                Infinity
+            ],
+            "doc": "Bounds of motion specified in native coordinates.  To specify bounds in transformed coordinates, use `limits`.",
+            "items": "double",
+            "origin": "has-transformed-position",
+            "type": "array"
+        },
         "out_of_limits": {
             "default": "closest",
             "doc": "Control behavior of daemon when set_position is given a value outside of limits.",
@@ -268,6 +278,12 @@
                 "type": "array"
             }
         },
+        "get_native_destination": {
+            "doc": "Get the destination in native coordinates.",
+            "origin": "has-transformed-position",
+            "request": [],
+            "response": "double"
+        },
         "get_native_limits": {
             "doc": "Returns limits in the relative coordinate system.",
             "origin": "has-transformed-position",
@@ -293,7 +309,10 @@
             "doc": "Get the units of native coordinates.",
             "origin": "has-transformed-position",
             "request": [],
-            "response": "string"
+            "response": [
+                "null",
+                "string"
+            ]
         },
         "get_position": {
             "doc": "Get current daemon position.",
