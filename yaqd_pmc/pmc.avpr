@@ -233,7 +233,8 @@
     },
     "doc": "Motor driver for motors from Precision MicroControl Corporation.\n",
     "hardware": [
-        "pmc:dcx-pci100"
+        "pmc:dcx-pci100",
+        "pmc:dcx-mc110"
     ],
     "installation": {
         "PyPI": "https://pypi.org/project/yaqd-pmc",
@@ -241,6 +242,7 @@
     },
     "links": {
         "bugtracker": "https://github.com/yaq-project/yaqd-pmc/issues",
+        "example-configs": "https://github.com/yaq-project/yaqd-pmc/tree/main/example-yaq-configs/pmc",
         "manufacturer": "https://pmccorp.com/products/api.php",
         "source": "https://github.com/yaq-project/yaqd-pmc/"
     },
