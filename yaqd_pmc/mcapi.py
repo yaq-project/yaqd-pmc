@@ -18,6 +18,7 @@
 		  - First release
 
 """
+
 from ctypes import *
 from ctypes.util import *
 from platform import architecture
