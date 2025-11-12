@@ -10,6 +10,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - implement has-transformed-position (relative positions)
 
+### Changed
+- rolling python support off 3.8, on 3.11
+
 ## [2022.11.0]
 
 ### Added
