@@ -1,23 +1,24 @@
 """
 
-	NAME
-		mcapi.py - motion control API function prototypes & macros for python
+NAME
+        mcapi.py - motion control API function prototypes & macros for python
 
-	DESCRIPTION
-		Include this class library in your python source to provide prototypes
-		for the motion control API functions.
+DESCRIPTION
+        Include this class library in your python source to provide prototypes
+        for the motion control API functions.
 
-		from mcapi.py inmport *
+        from mcapi.py inmport *
 
-	RELEASE HISTORY
-		Copyright (c) 2015 by Precision Micro Control Corp. All rights reserved.
+RELEASE HISTORY
+        Copyright (c) 2015 by Precision Micro Control Corp. All rights reserved.
 
-		$Id: mcapi.py 921 2015-06-23 18:16:19Z brian $
+        $Id: mcapi.py 921 2015-06-23 18:16:19Z brian $
 
-		Version 4.4.1		23-Jun-15		Programmer: R. Brian Gaynor
-		  - First release
+        Version 4.4.1		23-Jun-15		Programmer: R. Brian Gaynor
+          - First release
 
 """
+
 from ctypes import *
 from ctypes.util import *
 from platform import architecture
