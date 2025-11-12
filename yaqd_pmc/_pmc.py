@@ -3,12 +3,12 @@ __all__ = ["PmcMotor"]
 import asyncio
 from typing import Dict, Any, List
 
-from yaqd_core import ContinuousHardware
+from yaqd_core import HasTransformedPosition
 
 from . import mcapi
 
 
-class PmcMotor(ContinuousHardware):
+class PmcMotor(HasTransformedPosition):
     _kind = "pmc"
 
     def __init__(self, name, config, config_filepath):
@@ -34,6 +34,9 @@ class PmcMotor(ContinuousHardware):
 
         if config["startup_behavior"] == "trust_state":
             self.reset_to_known_position(self._state["position"])
+
+        # native position is defined as mm position relative to second hw_limit
+        self._native_units = "mm"
 
     def _get_filter(self, config):
         filt = mcapi.MCFILTEREX()

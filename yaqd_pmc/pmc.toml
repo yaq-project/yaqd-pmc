@@ -2,7 +2,7 @@ protocol = "pmc"
 doc = """
 Motor driver for motors from Precision MicroControl Corporation.
 """
-traits = ["has-limits", "is-daemon"]
+traits = ["has-transformed-position", "is-daemon"]
 hardware = ["pmc:dcx-pci100", "pmc:dcx-mc110"]
 
 [links]
