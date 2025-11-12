@@ -506,7 +506,7 @@ class Mcapi:
                 self._dll = ctypes.windll.mcapi64
         # ELF is linux, assume default library location (this should be made smarter!)
         elif platform.architecture()[1] == 'ELF':
-            self._dll = ctypes.cdll.LoadLibrary(find_library("mcapi"))
+            self._dll = ctypes.cdll.LoadLibrary(ctypes.util.find_library("mcapi"))
         else:
             print("Unsupported platform", platform.architecture())
         self._handle = ctypes.c_short(0)
@@ -925,7 +925,7 @@ class Mcapi:
     def GetDigitalIOConfig(self, channel):
         """Get the current configuration (in / out / high / low) of the a digital I/O channel."""
         mode = ctypes.c_ushort(0)
-        self.ProcessException(self._dll.MCGetDigitalIOConfig(self._handle, axis, mode))
+        self.ProcessException(self._dll.MCGetDigitalIOConfig(self._handle, channel, mode))
         return mode.value
 
     def GetDigitalIOEx(self, channel):
@@ -1030,11 +1030,11 @@ class Mcapi:
         if type == MC_TYPE_LONG:
             temp = ctypes.c_long(0)
         elif type == MC_TYPE_FLOAT:
-            temp = c_float(0)
+            temp = ctypes.c_float(0)
         elif type == MC_TYPE_DOUBLE:
             temp = ctypes.c_double(0)
         elif type == MC_TYPE_STRING:
-            temp = c_char(0)
+            temp = ctypes.c_char(0)
         else:
             raise McapiException(self.TranslateErrorEx(MCERR_CONSTANT))
         self.ProcessException(self._dll.MCGetRegister(self._handle, reg, ctypes.byref(temp), type))
@@ -1272,11 +1272,11 @@ class Mcapi:
         if type == MC_TYPE_LONG:
             temp = ctypes.c_long(value)
         elif type == MC_TYPE_FLOAT:
-            temp = c_float(value)
+            temp = ctypes.c_float(value)
         elif type == MC_TYPE_DOUBLE:
             temp = ctypes.c_double(value)
         elif type == MC_TYPE_STRING:
-            temp = c_char(value)
+            temp = ctypes.c_char(value)
         else:
             raise McapiException(self.TranslateErrorEx(MCERR_CONSTANT))
         self.ProcessException(self._dll.MCSetRegister(self._handle, reg, ctypes.byref(temp), type))
@@ -1325,7 +1325,7 @@ class Mcapi:
 
     def TranslateErrorEx(self, error):
         """Translate MCAPI numeric error codes into text."""
-        buffer = create_string_buffer(256)
+        buffer = ctypes.create_string_buffer(256)
         self._dll.MCTranslateErrorEx(error, buffer, 256)
         return buffer.value.decode()
 
@@ -1379,11 +1379,11 @@ class Mcapi:
         elif type == MC_TYPE_LONG:
             arg = ctypes.c_long(argument)
         elif type == MC_TYPE_FLOAT:
-            arg = c_float(argument)
+            arg = ctypes.c_float(argument)
         elif type == MC_TYPE_DOUBLE:
             arg = ctypes.c_double(argument)
         elif type == MC_TYPE_STRING:
-            arg = c_char(argument)
+            arg = ctypes.c_char(argument)
         else:
             raise McapiException(self.TranslateErrorEx(MCERR_CONSTANT))
         self.ProcessException(self._dll.pmccmdex(self._handle, axis, command, ctypes.byref(arg), type))
@@ -1397,22 +1397,22 @@ class Mcapi:
         elif arg_type == MC_TYPE_LONG:
             arg = ctypes.c_long(argument)
         elif arg_type == MC_TYPE_FLOAT:
-            arg = c_float(argument)
+            arg = ctypes.c_float(argument)
         elif arg_type == MC_TYPE_DOUBLE:
             arg = ctypes.c_double(argument)
         elif arg_type == MC_TYPE_STRING:
-            arg = c_char(argument)
+            arg = ctypes.c_char(argument)
         else:
             raise McapiException(self.TranslateErrorEx(MCERR_CONSTANT))
 
         if rpy_type == MC_TYPE_LONG:
             rpy = ctypes.c_long(0)
         elif rpy_type == MC_TYPE_FLOAT:
-            rpy = c_float(0)
+            rpy = ctypes.c_float(0)
         elif rpy_type == MC_TYPE_DOUBLE:
             rpy = ctypes.c_double(0)
         elif rpy_type == MC_TYPE_STRING:
-            rpy = c_char(0)
+            rpy = ctypes.c_char(0)
         else:
             raise McapiException(self.TranslateErrorEx(MCERR_CONSTANT))
 
