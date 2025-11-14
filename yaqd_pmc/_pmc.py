@@ -1,7 +1,6 @@
 __all__ = ["PmcMotor"]
 
 import asyncio
-from typing import Dict, Any, List
 
 from yaqd_core import HasTransformedPosition
 
@@ -15,7 +14,7 @@ class PmcMotor(HasTransformedPosition):
         super().__init__(name, config, config_filepath)
         self.controller = mcapi.Mcapi()
         self.axis = config["axis"]
-        self.controller.Open(config["controller"], 1)
+        self.controller.Open(config["controller"], mcapi.MC_OPEN_BINARY)
         self.controller.EnableAxis(self.axis, True)
 
         self.counts_per_mm = config["counts_per_mm"]
@@ -73,7 +72,13 @@ class PmcMotor(HasTransformedPosition):
     async def update_state(self):
         self._state["hw_limits"] = (0, 50)
         while True:
-            self._state["position"] = self.steps_to_mm(self.controller.GetPositionEx(self.axis))
+            try:
+                pos = self.controller.GetPositionEx(self.axis)
+                pos = self.steps_to_mm(pos)
+            except Exception as e:
+                self.logger.error(e)
+            if self._state["position"] != pos:  # setattr only when necessary
+                self._state["position"] = pos
             if self.backlash_done.is_set():
                 self._busy = (
                     abs(
@@ -111,3 +116,6 @@ class PmcMotor(HasTransformedPosition):
     def reset_to_known_position(self, position):
         self.controller.SetPosition(self.axis, self.mm_to_steps(position))
         self._state["destination"] = position
+
+    def close(self):
+        self.controller.Close()
