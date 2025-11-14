@@ -1,28 +1,32 @@
 """
 
 NAME
-        mcapi.py - motion control API function prototypes & macros for python
+    mcapi.py - motion control API function prototypes & macros for python
 
 DESCRIPTION
-        Include this class library in your python source to provide prototypes
-        for the motion control API functions.
+    Include this class library in your python source to provide prototypes
+    for the motion control API functions.
 
-        from mcapi.py inmport *
+import mcapi
 
 RELEASE HISTORY
-        Copyright (c) 2015 by Precision Micro Control Corp. All rights reserved.
+Copyright (c) 2015-2020 by Precision Micro Control Corp. All rights reserved.
 
-        $Id: mcapi.py 921 2015-06-23 18:16:19Z brian $
+    $Id: mcapi.py 1040 2020-11-30 22:00:32Z brian $
 
-        Version 4.4.1		23-Jun-15		Programmer: R. Brian Gaynor
-          - First release
+Version 4.4.1       23-Jun-15       Programmer: R. Brian Gaynor
+    - First release
+
+Version 4.5.0       10-Nov-17       Programmer: R. Brian Gaynor
+    - Removed unneeded paramter from Reset() declaration
+    - Use namespaces for imports (best practice)
+
+Version 4.5.1       23-Nov-20       Programmer: Brian Gaynor
+    - No changes
 
 """
 
-from ctypes import *
-from ctypes.util import *
-from platform import architecture
-from sys import getsizeof
+import ctypes, platform, sys
 
 #
 # Motion Control API manifest constants
@@ -30,7 +34,7 @@ from sys import getsizeof
 MC_ALL_AXES = 0  # Function should operate on all axes at once. Not valid for all functions, see function description.
 
 MC_ABSOLUTE = 0  # Argument is an absolute position, used as an parameter to many MCAPI functions.
-MC_RELATIVE = 1  # Argument is a relative position, used as an parameter to many MCAPI functions..
+MC_RELATIVE = 1  # Argument is a relative position, used as an parameter to many MCAPI functions.
 
 MC_BLOCK_COMPOUND = 0  # Block is a compound command forBlockBegin( ).
 MC_BLOCK_TASK = 1  # Block is a task on multitasking controllers for BlockBegin( ).
@@ -357,215 +361,215 @@ MCERR_NOT_FOUND = 29  # Error code:  restore operation could not find data, MCER
 MCERR_SOCKET = 32  # Error code:  tcp/ip socket error, MCERRMASK_IO group.
 
 # controller handle type
-HCTRLR = c_short
+HCTRLR = ctypes.c_short
 
 
 #
 # Axis configuration structure
 #
-class MCAXISCONFIG(Structure):
+class MCAXISCONFIG(ctypes.Structure):
     _pack_ = 4
     _fields_ = [
-        ("cbSize", c_int),
-        ("ModuleType", c_int),
-        ("ModuleLocation", c_int),
-        ("MotorType", c_int),
-        ("CaptureModes", c_int),
-        ("CapturePoints", c_int),
-        ("CaptureAndCompare", c_int),
-        ("HighRate", c_double),
-        ("MediumRate", c_double),
-        ("LowRate", c_double),
-        ("HighStepMin", c_double),
-        ("HighStepMax", c_double),
-        ("MediumStepMin", c_double),
-        ("MediumStepMax", c_double),
-        ("LowStepMin", c_double),
-        ("LowStepMax", c_double),
-        ("AuxEncoder", c_int),
+        ("cbSize", ctypes.c_int),
+        ("ModuleType", ctypes.c_int),
+        ("ModuleLocation", ctypes.c_int),
+        ("MotorType", ctypes.c_int),
+        ("CaptureModes", ctypes.c_int),
+        ("CapturePoints", ctypes.c_int),
+        ("CaptureAndCompare", ctypes.c_int),
+        ("HighRate", ctypes.c_double),
+        ("MediumRate", ctypes.c_double),
+        ("LowRate", ctypes.c_double),
+        ("HighStepMin", ctypes.c_double),
+        ("HighStepMax", ctypes.c_double),
+        ("MediumStepMin", ctypes.c_double),
+        ("MediumStepMax", ctypes.c_double),
+        ("LowStepMin", ctypes.c_double),
+        ("LowStepMax", ctypes.c_double),
+        ("AuxEncoder", ctypes.c_int),
     ]
 
     def __init__(self):
-        self.cbSize = getsizeof(self)
+        self.cbSize = sys.getsizeof(self)
 
 
 #
 # Commutation parameters structure
 #
-class MCCOMMUTATION(Structure):
+class MCCOMMUTATION(ctypes.Structure):
     _pack_ = 4
     _fields_ = [
-        ("cbSize", c_int),
-        ("PhaseA", c_double),
-        ("PhaseB", c_double),
-        ("Divisor", c_int),
-        ("PreScale", c_int),
-        ("Repeat", c_int),
+        ("cbSize", ctypes.c_int),
+        ("PhaseA", ctypes.c_double),
+        ("PhaseB", ctypes.c_double),
+        ("Divisor", ctypes.c_int),
+        ("PreScale", ctypes.c_int),
+        ("Repeat", ctypes.c_int),
     ]
 
     def __init__(self):
-        self.cbSize = getsizeof(self)
+        self.cbSize = sys.getsizeof(self)
 
 
 #
 # Contouring parameters structure
 #
-class MCCONTOUR(Structure):
+class MCCONTOUR(ctypes.Structure):
     _pack_ = 4
     _fields_ = [
-        ("VectorAccel", c_double),
-        ("VectorDecel", c_double),
-        ("VectorVelocity", c_double),
-        ("VelocityOverride", c_double),
+        ("VectorAccel", ctypes.c_double),
+        ("VectorDecel", ctypes.c_double),
+        ("VectorVelocity", ctypes.c_double),
+        ("VelocityOverride", ctypes.c_double),
     ]
 
 
 #
 # PID Filter parameters structure (extended)
 #
-class MCFILTEREX(Structure):
+class MCFILTEREX(ctypes.Structure):
     _pack_ = 4
     _fields_ = [
-        ("cbSize", c_int),
-        ("Gain", c_double),
-        ("IntegralGain", c_double),
-        ("IntegrationLimit", c_double),
-        ("IntegralOption", c_int),
-        ("DerivativeGain", c_double),
-        ("DerSamplePeriod", c_double),
-        ("FollowingError", c_double),
-        ("VelocityGain", c_double),
-        ("AccelGain", c_double),
-        ("DecelGain", c_double),
-        ("EncoderScaling", c_double),
-        ("UpdateRate", c_int),
-        ("PositionDeadband", c_double),
-        ("DelayAtTarget", c_double),
-        ("OutputOffset", c_double),
-        ("OutputDeadband", c_double),
+        ("cbSize", ctypes.c_int),
+        ("Gain", ctypes.c_double),
+        ("IntegralGain", ctypes.c_double),
+        ("IntegrationLimit", ctypes.c_double),
+        ("IntegralOption", ctypes.c_int),
+        ("DerivativeGain", ctypes.c_double),
+        ("DerSamplePeriod", ctypes.c_double),
+        ("FollowingError", ctypes.c_double),
+        ("VelocityGain", ctypes.c_double),
+        ("AccelGain", ctypes.c_double),
+        ("DecelGain", ctypes.c_double),
+        ("EncoderScaling", ctypes.c_double),
+        ("UpdateRate", ctypes.c_int),
+        ("PositionDeadband", ctypes.c_double),
+        ("DelayAtTarget", ctypes.c_double),
+        ("OutputOffset", ctypes.c_double),
+        ("OutputDeadband", ctypes.c_double),
     ]
 
     def __init__(self):
-        self.cbSize = getsizeof(self)
+        self.cbSize = sys.getsizeof(self)
 
 
 #
 # Jog control parameters structure (added in MCAPI version 4.1.0)
 #
-class MCJOGEX(Structure):
+class MCJOGEX(ctypes.Structure):
     _pack_ = 4
     _fields_ = [
-        ("cbSize", c_int),
-        ("Acceleration", c_double),
-        ("MinVelocity", c_double),
-        ("Deadband", c_double),
-        ("Gain", c_double),
-        ("Offset", c_double),
-        ("Channel", c_int),
+        ("cbSize", ctypes.c_int),
+        ("Acceleration", ctypes.c_double),
+        ("MinVelocity", ctypes.c_double),
+        ("Deadband", ctypes.c_double),
+        ("Gain", ctypes.c_double),
+        ("Offset", ctypes.c_double),
+        ("Channel", ctypes.c_int),
     ]
 
     def __init__(self):
-        self.cbSize = getsizeof(self)
+        self.cbSize = sys.getsizeof(self)
 
 
 #
 # Motion parameters structure (extended)
 #
-class MCMOTIONEX(Structure):
+class MCMOTIONEX(ctypes.Structure):
     _pack_ = 4
     _fields_ = [
-        ("cbSize", c_int),
-        ("Acceleration", c_double),
-        ("Deceleration", c_double),
-        ("Velocity", c_double),
-        ("MinVelocity", c_double),
-        ("Direction", c_int),
-        ("Torque", c_double),
-        ("Deadband", c_double),
-        ("DeadbandDelay", c_double),
-        ("StepSize", c_int),
-        ("Current", c_int),
-        ("HardLimitMode", c_int),
-        ("SoftLimitMode", c_int),
-        ("SoftLimitLow", c_double),
-        ("SoftLimitHigh", c_double),
-        ("EnableAmpFault", c_int),
+        ("cbSize", ctypes.c_int),
+        ("Acceleration", ctypes.c_double),
+        ("Deceleration", ctypes.c_double),
+        ("Velocity", ctypes.c_double),
+        ("MinVelocity", ctypes.c_double),
+        ("Direction", ctypes.c_int),
+        ("Torque", ctypes.c_double),
+        ("Deadband", ctypes.c_double),
+        ("DeadbandDelay", ctypes.c_double),
+        ("StepSize", ctypes.c_int),
+        ("Current", ctypes.c_int),
+        ("HardLimitMode", ctypes.c_int),
+        ("SoftLimitMode", ctypes.c_int),
+        ("SoftLimitLow", ctypes.c_double),
+        ("SoftLimitHigh", ctypes.c_double),
+        ("EnableAmpFault", ctypes.c_int),
     ]
 
     def __init__(self):
-        self.cbSize = getsizeof(self)
+        self.cbSize = sys.getsizeof(self)
 
 
 #
 # Controller configuration structure (extended)
 #
-class MCPARAMEX(Structure):
+class MCPARAMEX(ctypes.Structure):
     _pack_ = 4
     _fields_ = [
-        ("cbSize", c_int),
-        ("ID", c_int),
-        ("ControllerType", c_int),
-        ("NumberAxes", c_int),
-        ("MaximumAxes", c_int),
-        ("MaximumModules", c_int),
-        ("Precision", c_int),
-        ("DigitalIO", c_int),
-        ("AnalogInput", c_int),
-        ("AnalogOutput", c_int),
-        ("PointStorage", c_int),
-        ("CanDoScaling", c_int),
-        ("CanDoContouring", c_int),
-        ("CanChangeProfile", c_int),
-        ("CanChangeRates", c_int),
-        ("SoftLimits", c_int),
-        ("MultiTasking", c_int),
-        ("AmpFault", c_int),
-        ("AnalogInpMin", c_double),
-        ("AnalogInpMax", c_double),
-        ("AnalogInpRes", c_int),
-        ("AnalogOutMin", c_double),
-        ("AnalogOutMax", c_double),
-        ("AnalogOutRes", c_int),
-        ("OutputMode", c_int),
-        ("AtTarget", c_int),
-        ("OutputControl", c_int),
-        ("LineModeAscii", c_int),
+        ("cbSize", ctypes.c_int),
+        ("ID", ctypes.c_int),
+        ("ControllerType", ctypes.c_int),
+        ("NumberAxes", ctypes.c_int),
+        ("MaximumAxes", ctypes.c_int),
+        ("MaximumModules", ctypes.c_int),
+        ("Precision", ctypes.c_int),
+        ("DigitalIO", ctypes.c_int),
+        ("AnalogInput", ctypes.c_int),
+        ("AnalogOutput", ctypes.c_int),
+        ("PointStorage", ctypes.c_int),
+        ("CanDoScaling", ctypes.c_int),
+        ("CanDoContouring", ctypes.c_int),
+        ("CanChangeProfile", ctypes.c_int),
+        ("CanChangeRates", ctypes.c_int),
+        ("SoftLimits", ctypes.c_int),
+        ("MultiTasking", ctypes.c_int),
+        ("AmpFault", ctypes.c_int),
+        ("AnalogInpMin", ctypes.c_double),
+        ("AnalogInpMax", ctypes.c_double),
+        ("AnalogInpRes", ctypes.c_int),
+        ("AnalogOutMin", ctypes.c_double),
+        ("AnalogOutMax", ctypes.c_double),
+        ("AnalogOutRes", ctypes.c_int),
+        ("OutputMode", ctypes.c_int),
+        ("AtTarget", ctypes.c_int),
+        ("OutputControl", ctypes.c_int),
+        ("LineModeAscii", ctypes.c_int),
     ]
 
     def __init__(self):
-        self.cbSize = getsizeof(self)
+        self.cbSize = sys.getsizeof(self)
 
 
 #
 # Scaling factors data structure
 #
-class MCSCALE(Structure):
+class MCSCALE(ctypes.Structure):
     _pack_ = 4
     _fields_ = [
-        ("Constant", c_double),
-        ("Offset", c_double),
-        ("Rate", c_double),
-        ("Scale", c_double),
-        ("Zero", c_double),
-        ("Time", c_double),
+        ("Constant", ctypes.c_double),
+        ("Offset", ctypes.c_double),
+        ("Rate", ctypes.c_double),
+        ("Scale", ctypes.c_double),
+        ("Zero", ctypes.c_double),
+        ("Time", ctypes.c_double),
     ]
 
 
 #
 # Status word data structure
 #
-class MCSTATUSEX(Structure):
+class MCSTATUSEX(ctypes.Structure):
     _pack_ = 4
     _fields_ = [
-        ("cbSize", c_int),
-        ("Status", c_uint),
-        ("AuxStatus", c_uint),
-        ("ProfileStatus", c_uint),
-        ("ModeStatus", c_uint),
+        ("cbSize", ctypes.c_int),
+        ("Status", ctypes.c_uint),
+        ("AuxStatus", ctypes.c_uint),
+        ("ProfileStatus", ctypes.c_uint),
+        ("ModeStatus", ctypes.c_uint),
     ]
 
     def __init__(self):
-        self.cbSize = getsizeof(self)
+        self.cbSize = sys.getsizeof(self)
 
 
 #
@@ -584,249 +588,433 @@ class Mcapi:
     # Motion Control API
     def __init__(self):
         # windows
-        if architecture()[1] == "WindowsPE":
-            if architecture()[0] == "32bit":
-                self._dll = windll.mcapi32
+        if platform.architecture()[1] == "WindowsPE":
+            if platform.architecture()[0] == "32bit":
+                self._dll = ctypes.windll.mcapi32
             else:
-                self._dll = windll.mcapi64
-        # ELF is linux, assume default library locatiion (this should be made smarter!)
-        elif architecture()[1] == "ELF":
-            self._dll = cdll.LoadLibrary(find_library("mcapi"))
+                self._dll = ctypes.windll.mcapi64
+        # ELF is linux, assume default library location (this should be made smarter!)
+        elif platform.architecture()[1] == "ELF":
+            self._dll = ctypes.cdll.LoadLibrary(ctypes.util.find_library("mcapi"))
         else:
-            print("Unsupported platform", architecture())
-        self._handle = c_short(0)
+            print("Unsupported platform", platform.architecture())
+        self._handle = ctypes.c_short(0)
 
         #
         # MCAPI function argument and return type declarations. It would be nice if these could be in their
         # respective member function but there is about a 12% performance penalty if they are run every time a
         # function is called (because python is interpreted). In __init__ they only run once.
         #
-        self._dll.MCAbort.argtypes = [HCTRLR, c_ushort]
+        self._dll.MCAbort.argtypes = [HCTRLR, ctypes.c_ushort]
         self._dll.MCAbort.restype = None
-        self._dll.MCArcCenter.argtypes = [HCTRLR, c_ushort, c_short, c_double]
-        self._dll.MCArcEndAngle.argtypes = [HCTRLR, c_ushort, c_short, c_double]
-        self._dll.MCArcRadius.argtypes = [HCTRLR, c_ushort, c_double]
-        self._dll.MCBlockBegin.argtypes = [HCTRLR, c_int, c_int]
-        self._dll.MCBlockEnd.argtypes = [HCTRLR, POINTER(c_int)]
-        self._dll.MCCancelTask.argtypes = [HCTRLR, c_int]
-        self._dll.MCCaptureData.argtypes = [HCTRLR, c_ushort, c_int, c_double, c_double]
+        self._dll.MCArcCenter.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_short, ctypes.c_double]
+        self._dll.MCArcEndAngle.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.c_short,
+            ctypes.c_double,
+        ]
+        self._dll.MCArcRadius.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
+        self._dll.MCBlockBegin.argtypes = [HCTRLR, ctypes.c_int, ctypes.c_int]
+        self._dll.MCBlockEnd.argtypes = [HCTRLR, ctypes.POINTER(ctypes.c_int)]
+        self._dll.MCCancelTask.argtypes = [HCTRLR, ctypes.c_int]
+        self._dll.MCCaptureData.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.c_int,
+            ctypes.c_double,
+            ctypes.c_double,
+        ]
         self._dll.MCClose.argtypes = [HCTRLR]
-        self._dll.MCClose.restype = c_short
+        self._dll.MCClose.restype = ctypes.c_short
         self._dll.MCConfigureCompare.argtypes = [
             HCTRLR,
-            c_ushort,
-            POINTER(c_double),
-            c_int,
-            c_double,
-            c_int,
-            c_double,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_double),
+            ctypes.c_int,
+            ctypes.c_double,
+            ctypes.c_int,
+            ctypes.c_double,
         ]
-        self._dll.MCConfigureDigitalIO.argtypes = [HCTRLR, c_ushort, c_ushort]
-        self._dll.MCConfigureDigitalIO.restype = c_short
-        self._dll.MCContourDistance.argtypes = [HCTRLR, c_ushort, c_double]
-        self._dll.MCDecodeStatus.argtypes = [HCTRLR, c_uint, c_int]
-        self._dll.MCDecodeStatusEx.argtypes = [HCTRLR, POINTER(MCSTATUSEX), c_int]
-        self._dll.MCDirection.argtypes = [HCTRLR, c_ushort, c_ushort]
+        self._dll.MCConfigureDigitalIO.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_ushort]
+        self._dll.MCConfigureDigitalIO.restype = ctypes.c_short
+        self._dll.MCContourDistance.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
+        self._dll.MCDecodeStatus.argtypes = [HCTRLR, ctypes.c_uint, ctypes.c_int]
+        self._dll.MCDecodeStatusEx.argtypes = [HCTRLR, ctypes.POINTER(MCSTATUSEX), ctypes.c_int]
+        self._dll.MCDirection.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_ushort]
         self._dll.MCDirection.restype = None
-        self._dll.MCEdgeArm.argtypes = [HCTRLR, c_ushort, c_double]
-        self._dll.MCEnableAxis.argtypes = [HCTRLR, c_ushort, c_short]
+        self._dll.MCEdgeArm.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
+        self._dll.MCEnableAxis.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_short]
         self._dll.MCEnableAxis.restype = None
-        self._dll.MCEnableBacklash.argtypes = [HCTRLR, c_ushort, c_double, c_short]
-        self._dll.MCEnableCapture.argtypes = [HCTRLR, c_ushort, c_int]
-        self._dll.MCEnableCompare.argtypes = [HCTRLR, c_ushort, c_int]
-        self._dll.MCEnableDigitalFilter.argtypes = [HCTRLR, c_ushort, c_int]
-        self._dll.MCEnableDigitalIO.argtypes = [HCTRLR, c_ushort, c_short]
+        self._dll.MCEnableBacklash.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.c_double,
+            ctypes.c_short,
+        ]
+        self._dll.MCEnableCapture.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_int]
+        self._dll.MCEnableCompare.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_int]
+        self._dll.MCEnableDigitalFilter.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_int]
+        self._dll.MCEnableDigitalIO.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_short]
         self._dll.MCEnableDigitalIO.restype = None
-        self._dll.MCEnableEncoderFault.argtypes = [HCTRLR, c_ushort, c_int]
-        self._dll.MCEnableGearing.argtypes = [HCTRLR, c_ushort, c_ushort, c_double, c_short]
+        self._dll.MCEnableEncoderFault.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_int]
+        self._dll.MCEnableGearing.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.c_ushort,
+            ctypes.c_double,
+            ctypes.c_short,
+        ]
         self._dll.MCEnableGearing.restype = None
-        self._dll.MCEnableJog.argtypes = [HCTRLR, c_ushort, c_short]
+        self._dll.MCEnableJog.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_short]
         self._dll.MCEnableJog.restype = None
-        self._dll.MCEnableSync.argtypes = [HCTRLR, c_ushort, c_short]
+        self._dll.MCEnableSync.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_short]
         self._dll.MCEnableSync.restype = None
-        self._dll.MCFindAuxEncIdx.argtypes = [HCTRLR, c_ushort, c_double]
-        self._dll.MCFindEdge.argtypes = [HCTRLR, c_ushort, c_double]
-        self._dll.MCFindIndex.argtypes = [HCTRLR, c_ushort, c_double]
-        self._dll.MCGetAccelerationEx.argtypes = [HCTRLR, c_ushort, POINTER(c_double)]
-        self._dll.MCGetAnalogEx.argtypes = [HCTRLR, c_ushort, POINTER(c_uint)]
-        self._dll.MCGetAuxEncIdxEx.argtypes = [HCTRLR, c_ushort, POINTER(c_double)]
-        self._dll.MCGetAuxEncPosEx.argtypes = [HCTRLR, c_ushort, POINTER(c_double)]
-        self._dll.MCGetAxisConfiguration.argtypes = [HCTRLR, c_ushort, POINTER(MCAXISCONFIG)]
-        self._dll.MCGetBreakpointEx.argtypes = [HCTRLR, c_ushort, POINTER(c_double)]
+        self._dll.MCFindAuxEncIdx.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
+        self._dll.MCFindEdge.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
+        self._dll.MCFindIndex.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
+        self._dll.MCGetAccelerationEx.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_double),
+        ]
+        self._dll.MCGetAnalogEx.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.POINTER(ctypes.c_uint)]
+        self._dll.MCGetAuxEncIdxEx.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_double),
+        ]
+        self._dll.MCGetAuxEncPosEx.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_double),
+        ]
+        self._dll.MCGetAxisConfiguration.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(MCAXISCONFIG),
+        ]
+        self._dll.MCGetBreakpointEx.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_double),
+        ]
         self._dll.MCGetCaptureData.argtypes = [
             HCTRLR,
-            c_ushort,
-            c_int,
-            c_int,
-            c_int,
-            POINTER(c_double),
+            ctypes.c_ushort,
+            ctypes.c_int,
+            ctypes.c_int,
+            ctypes.c_int,
+            ctypes.POINTER(ctypes.c_double),
         ]
         self._dll.MCGetCaptureSettings.argtypes = [
             HCTRLR,
-            c_ushort,
-            POINTER(c_int),
-            POINTER(c_double),
-            POINTER(c_double),
-            POINTER(c_int),
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_int),
+            ctypes.POINTER(ctypes.c_double),
+            ctypes.POINTER(ctypes.c_double),
+            ctypes.POINTER(ctypes.c_int),
         ]
-        self._dll.MCGetConfigurationEx.argtypes = [HCTRLR, POINTER(MCPARAMEX)]
-        self._dll.MCGetContourConfig.argtypes = [HCTRLR, c_ushort, POINTER(MCCONTOUR)]
-        self._dll.MCGetContourConfig.restype = c_short
-        self._dll.MCGetCount.argtypes = [HCTRLR, c_ushort, c_int, POINTER(c_int)]
-        self._dll.MCGetDecelerationEx.argtypes = [HCTRLR, c_ushort, POINTER(c_double)]
+        self._dll.MCGetConfigurationEx.argtypes = [HCTRLR, ctypes.POINTER(MCPARAMEX)]
+        self._dll.MCGetContourConfig.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(MCCONTOUR),
+        ]
+        self._dll.MCGetContourConfig.restype = ctypes.c_short
+        self._dll.MCGetCount.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.c_int,
+            ctypes.POINTER(ctypes.c_int),
+        ]
+        self._dll.MCGetDecelerationEx.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_double),
+        ]
         self._dll.MCGetDigitalFilter.argtypes = [
             HCTRLR,
-            c_ushort,
-            POINTER(c_double),
-            c_int,
-            POINTER(c_int),
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_double),
+            ctypes.c_int,
+            ctypes.POINTER(ctypes.c_int),
         ]
-        self._dll.MCGetDigitalIOConfig.argtypes = [HCTRLR, c_ushort, POINTER(c_ushort)]
-        self._dll.MCGetDigitalIOEx.argtypes = [HCTRLR, c_ushort, POINTER(c_uint)]
+        self._dll.MCGetDigitalIOConfig.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_ushort),
+        ]
+        self._dll.MCGetDigitalIOEx.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_uint),
+        ]
         self._dll.MCGetError.argtypes = [HCTRLR]
-        self._dll.MCGetError.restype = c_short
-        self._dll.MCGetFilterConfigEx.argtypes = [HCTRLR, c_ushort, POINTER(MCFILTEREX)]
-        self._dll.MCGetFollowingError.argtypes = [HCTRLR, c_ushort, POINTER(c_double)]
-        self._dll.MCGetGain.argtypes = [HCTRLR, c_ushort, POINTER(c_double)]
-        self._dll.MCGetIndexEx.argtypes = [HCTRLR, c_ushort, POINTER(c_double)]
-        self._dll.MCGetInstalledModules.argtypes = [HCTRLR, POINTER(c_long), c_int]
-        self._dll.MCGetJogConfigEx.argtypes = [HCTRLR, c_ushort, POINTER(MCJOGEX)]
+        self._dll.MCGetError.restype = ctypes.c_short
+        self._dll.MCGetFilterConfigEx.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(MCFILTEREX),
+        ]
+        self._dll.MCGetFollowingError.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_double),
+        ]
+        self._dll.MCGetGain.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.POINTER(ctypes.c_double)]
+        self._dll.MCGetIndexEx.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_double),
+        ]
+        self._dll.MCGetInstalledModules.argtypes = [
+            HCTRLR,
+            ctypes.POINTER(ctypes.c_long),
+            ctypes.c_int,
+        ]
+        self._dll.MCGetJogConfigEx.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.POINTER(MCJOGEX)]
         self._dll.MCGetLimits.argtypes = [
             HCTRLR,
-            c_ushort,
-            POINTER(c_short),
-            POINTER(c_short),
-            POINTER(c_double),
-            POINTER(c_double),
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_short),
+            ctypes.POINTER(ctypes.c_short),
+            ctypes.POINTER(ctypes.c_double),
+            ctypes.POINTER(ctypes.c_double),
         ]
-        self._dll.MCGetModuleInputMode.argtypes = [HCTRLR, c_ushort, POINTER(c_int)]
-        self._dll.MCGetModuleOutputMode.argtypes = [HCTRLR, c_ushort, POINTER(c_ushort)]
-        self._dll.MCGetMotionConfigEx.argtypes = [HCTRLR, c_ushort, POINTER(MCMOTIONEX)]
-        self._dll.MCGetOperatingMode.argtypes = [HCTRLR, c_ushort, POINTER(c_int)]
-        self._dll.MCGetOptimalEx.argtypes = [HCTRLR, c_ushort, POINTER(c_double)]
-        self._dll.MCGetPositionEx.argtypes = [HCTRLR, c_ushort, POINTER(c_double)]
-        self._dll.MCGetProfile.argtypes = [HCTRLR, c_ushort, POINTER(c_ushort)]
-        self._dll.MCGetRegister.argtypes = [HCTRLR, c_int, c_void_p, c_int]
-        self._dll.MCGetScale.argtypes = [HCTRLR, c_ushort, POINTER(MCSCALE)]
-        self._dll.MCGetScale.restype = c_short
-        self._dll.MCGetServoOutputPhase.argtypes = [HCTRLR, c_ushort, POINTER(c_ushort)]
-        self._dll.MCGetStatus.argtypes = [HCTRLR, c_ushort]
-        self._dll.MCGetError.restype = c_uint
-        self._dll.MCGetStatusEx.argtypes = [HCTRLR, c_ushort, POINTER(MCSTATUSEX)]
-        self._dll.MCGetTargetEx.argtypes = [HCTRLR, c_ushort, POINTER(c_double)]
-        self._dll.MCGetTorque.argtypes = [HCTRLR, c_ushort, POINTER(c_double)]
-        self._dll.MCGetTrajectoryRate.argtypes = [HCTRLR, POINTER(c_int)]
-        self._dll.MCGetVectorVelocity.argtypes = [HCTRLR, c_ushort, POINTER(c_double)]
-        self._dll.MCGetVelocityActual.argtypes = [HCTRLR, c_ushort, POINTER(c_double)]
-        self._dll.MCGetVelocityEx.argtypes = [HCTRLR, c_ushort, POINTER(c_double)]
-        self._dll.MCGetVelocityOverride.argtypes = [HCTRLR, c_ushort, POINTER(c_double)]
+        self._dll.MCGetModuleInputMode.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_int),
+        ]
+        self._dll.MCGetModuleOutputMode.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_ushort),
+        ]
+        self._dll.MCGetMotionConfigEx.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(MCMOTIONEX),
+        ]
+        self._dll.MCGetOperatingMode.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_int),
+        ]
+        self._dll.MCGetOptimalEx.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_double),
+        ]
+        self._dll.MCGetPositionEx.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_double),
+        ]
+        self._dll.MCGetProfile.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_ushort),
+        ]
+        self._dll.MCGetRegister.argtypes = [HCTRLR, ctypes.c_int, ctypes.c_void_p, ctypes.c_int]
+        self._dll.MCGetScale.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.POINTER(MCSCALE)]
+        self._dll.MCGetScale.restype = ctypes.c_short
+        self._dll.MCGetServoOutputPhase.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_ushort),
+        ]
+        self._dll.MCGetStatus.argtypes = [HCTRLR, ctypes.c_ushort]
+        self._dll.MCGetError.restype = ctypes.c_uint
+        self._dll.MCGetStatusEx.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.POINTER(MCSTATUSEX)]
+        self._dll.MCGetTargetEx.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_double),
+        ]
+        self._dll.MCGetTorque.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.POINTER(ctypes.c_double)]
+        self._dll.MCGetTrajectoryRate.argtypes = [HCTRLR, ctypes.POINTER(ctypes.c_int)]
+        self._dll.MCGetVectorVelocity.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_double),
+        ]
+        self._dll.MCGetVelocityActual.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_double),
+        ]
+        self._dll.MCGetVelocityEx.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_double),
+        ]
+        self._dll.MCGetVelocityOverride.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_double),
+        ]
         self._dll.MCGetVersion.argtypes = [HCTRLR]
-        self._dll.MCGetVersion.restype = c_uint
-        self._dll.MCGoEx.argtypes = [HCTRLR, c_ushort, c_double]
-        self._dll.MCGoHome.argtypes = [HCTRLR, c_ushort]
+        self._dll.MCGetVersion.restype = ctypes.c_uint
+        self._dll.MCGoEx.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
+        self._dll.MCGoHome.argtypes = [HCTRLR, ctypes.c_ushort]
         self._dll.MCGoHome.restype = None
-        self._dll.MCIndexArm.argtypes = [HCTRLR, c_ushort, c_double]
-        self._dll.MCInterruptOnPosition.argtypes = [HCTRLR, c_ushort, c_int, c_double]
-        self._dll.MCIsAtTarget.argtypes = [HCTRLR, c_ushort, c_double]
-        self._dll.MCIsDigitalFilter.argtypes = [HCTRLR, c_ushort]
-        self._dll.MCIsEdgeFound.argtypes = [HCTRLR, c_ushort, c_double]
-        self._dll.MCIsIndexFound.argtypes = [HCTRLR, c_ushort, c_double]
-        self._dll.MCIsStopped.argtypes = [HCTRLR, c_ushort, c_double]
-        self._dll.MCLearnPoint.argtypes = [HCTRLR, c_ushort, c_int, c_ushort]
-        self._dll.MCMacroCall.argtypes = [HCTRLR, c_ushort]
+        self._dll.MCIndexArm.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
+        self._dll.MCInterruptOnPosition.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.c_int,
+            ctypes.c_double,
+        ]
+        self._dll.MCIsAtTarget.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
+        self._dll.MCIsDigitalFilter.argtypes = [HCTRLR, ctypes.c_ushort]
+        self._dll.MCIsEdgeFound.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
+        self._dll.MCIsIndexFound.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
+        self._dll.MCIsStopped.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
+        self._dll.MCLearnPoint.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_int, ctypes.c_ushort]
+        self._dll.MCMacroCall.argtypes = [HCTRLR, ctypes.c_ushort]
         self._dll.MCMacroCall.restype = None
-        self._dll.MCMoveAbsolute.argtypes = [HCTRLR, c_ushort, c_double]
+        self._dll.MCMoveAbsolute.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
         self._dll.MCMoveAbsolute.restype = None
-        self._dll.MCMoveRelative.argtypes = [HCTRLR, c_ushort, c_double]
+        self._dll.MCMoveRelative.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
         self._dll.MCMoveRelative.restype = None
-        self._dll.MCMoveToPoint.argtypes = [HCTRLR, c_ushort, c_int]
-        self._dll.MCOpen.argtypes = [c_short, c_ushort, c_char_p]
+        self._dll.MCMoveToPoint.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_int]
+        self._dll.MCOpen.argtypes = [ctypes.c_short, ctypes.c_ushort, ctypes.c_char_p]
         self._dll.MCOpen.restype = HCTRLR
-        self._dll.MCReopen.argtypes = [HCTRLR, c_ushort]
-        self._dll.MCRepeat.argtypes = [HCTRLR, c_int]
-        self._dll.MCReset.argtypes = [HCTRLR, c_ushort]
+        self._dll.MCReopen.argtypes = [HCTRLR, ctypes.c_ushort]
+        self._dll.MCRepeat.argtypes = [HCTRLR, ctypes.c_int]
+        self._dll.MCReset.argtypes = [HCTRLR, ctypes.c_ushort]
         self._dll.MCReset.restype = None
-        self._dll.MCSetAcceleration.argtypes = [HCTRLR, c_ushort, c_double]
+        self._dll.MCSetAcceleration.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
         self._dll.MCSetAcceleration.restype = None
-        self._dll.MCSetAnalogEx.argtypes = [HCTRLR, c_int, c_uint]
-        self._dll.MCSetAuxEncPos.argtypes = [HCTRLR, c_ushort, c_double]
+        self._dll.MCSetAnalogEx.argtypes = [HCTRLR, ctypes.c_int, ctypes.c_uint]
+        self._dll.MCSetAuxEncPos.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
         self._dll.MCSetAuxEncPos.restype = None
-        self._dll.MCSetCommutation.argtypes = [HCTRLR, c_ushort, POINTER(MCCOMMUTATION)]
-        self._dll.MCSetContourConfig.argtypes = [HCTRLR, c_ushort, POINTER(MCCONTOUR)]
-        self._dll.MCSetContourConfig.restype = c_short
-        self._dll.MCSetDeceleration.argtypes = [HCTRLR, c_ushort, c_double]
+        self._dll.MCSetCommutation.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(MCCOMMUTATION),
+        ]
+        self._dll.MCSetContourConfig.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(MCCONTOUR),
+        ]
+        self._dll.MCSetContourConfig.restype = ctypes.c_short
+        self._dll.MCSetDeceleration.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
         self._dll.MCSetDeceleration.restype = None
-        self._dll.MCSetDigitalFilter.argtypes = [HCTRLR, c_ushort, POINTER(c_double), c_int]
-        self._dll.MCSetFilterConfigEx.argtypes = [HCTRLR, c_ushort, POINTER(MCFILTEREX)]
-        self._dll.MCSetGain.argtypes = [HCTRLR, c_int, c_double]
-        self._dll.MCSetJogConfigEx.argtypes = [HCTRLR, c_ushort, POINTER(MCJOGEX)]
-        self._dll.MCSetLimits.argtypes = [HCTRLR, c_ushort, c_short, c_short, c_double, c_double]
-        self._dll.MCSetModuleInputMode.argtypes = [HCTRLR, c_ushort, c_int]
-        self._dll.MCSetModuleOutputMode.argtypes = [HCTRLR, c_ushort, c_ushort]
+        self._dll.MCSetDigitalFilter.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(ctypes.c_double),
+            ctypes.c_int,
+        ]
+        self._dll.MCSetFilterConfigEx.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(MCFILTEREX),
+        ]
+        self._dll.MCSetGain.argtypes = [HCTRLR, ctypes.c_int, ctypes.c_double]
+        self._dll.MCSetJogConfigEx.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.POINTER(MCJOGEX)]
+        self._dll.MCSetLimits.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.c_short,
+            ctypes.c_short,
+            ctypes.c_double,
+            ctypes.c_double,
+        ]
+        self._dll.MCSetModuleInputMode.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_int]
+        self._dll.MCSetModuleOutputMode.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_ushort]
         self._dll.MCSetModuleOutputMode.restype = None
-        self._dll.MCSetMotionConfigEx.argtypes = [HCTRLR, c_ushort, POINTER(MCMOTIONEX)]
-        self._dll.MCSetOperatingMode.argtypes = [HCTRLR, c_ushort, c_ushort, c_ushort]
+        self._dll.MCSetMotionConfigEx.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.POINTER(MCMOTIONEX),
+        ]
+        self._dll.MCSetOperatingMode.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.c_ushort,
+            ctypes.c_ushort,
+        ]
         self._dll.MCSetOperatingMode.restype = None
-        self._dll.MCSetPosition.argtypes = [HCTRLR, c_ushort, c_double]
+        self._dll.MCSetPosition.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
         self._dll.MCSetPosition.restype = None
-        self._dll.MCSetProfile.argtypes = [HCTRLR, c_ushort, c_ushort]
+        self._dll.MCSetProfile.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_ushort]
         self._dll.MCSetProfile.restype = None
-        self._dll.MCSetRegister.argtypes = [HCTRLR, c_int, c_void_p, c_int]
-        self._dll.MCSetScale.argtypes = [HCTRLR, c_ushort, POINTER(MCSCALE)]
-        self._dll.MCSetScale.restype = c_short
-        self._dll.MCSetServoOutputPhase.restype = c_short
-        self._dll.MCSetServoOutputPhase.argtypes = [HCTRLR, c_ushort, c_ushort]
+        self._dll.MCSetRegister.argtypes = [HCTRLR, ctypes.c_int, ctypes.c_void_p, ctypes.c_int]
+        self._dll.MCSetScale.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.POINTER(MCSCALE)]
+        self._dll.MCSetScale.restype = ctypes.c_short
+        self._dll.MCSetServoOutputPhase.restype = ctypes.c_short
+        self._dll.MCSetServoOutputPhase.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_ushort]
         self._dll.MCSetServoOutputPhase.restype = None
-        self._dll.MCSetTimeoutEx.argtypes = [HCTRLR, c_double, POINTER(c_double)]
-        self._dll.MCSetTorque.argtypes = [HCTRLR, c_ushort, c_double]
-        self._dll.MCSetTrajectoryRate.argtypes = [HCTRLR, c_ushort, c_int]
-        self._dll.MCSetVectorVelocity.argtypes = [HCTRLR, c_ushort, c_double]
-        self._dll.MCSetVelocity.argtypes = [HCTRLR, c_ushort, c_double]
+        self._dll.MCSetTimeoutEx.argtypes = [
+            HCTRLR,
+            ctypes.c_double,
+            ctypes.POINTER(ctypes.c_double),
+        ]
+        self._dll.MCSetTorque.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
+        self._dll.MCSetTrajectoryRate.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_int]
+        self._dll.MCSetVectorVelocity.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
+        self._dll.MCSetVelocity.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
         self._dll.MCSetVelocity.restype = None
-        self._dll.MCSetVelocityOverride.argtypes = [HCTRLR, c_ushort, c_double]
-        self._dll.MCStop.argtypes = [HCTRLR, c_ushort]
+        self._dll.MCSetVelocityOverride.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
+        self._dll.MCStop.argtypes = [HCTRLR, ctypes.c_ushort]
         self._dll.MCStop.restype = None
-        self._dll.MCTranslateErrorEx.argtypes = [c_short, c_char_p, c_int]
-        self._dll.MCWait.argtypes = [HCTRLR, c_double]
+        self._dll.MCTranslateErrorEx.argtypes = [ctypes.c_short, ctypes.c_char_p, ctypes.c_int]
+        self._dll.MCWait.argtypes = [HCTRLR, ctypes.c_double]
         self._dll.MCWait.restype = None
-        self._dll.MCWaitForDigitalIO.argtypes = [HCTRLR, c_ushort, c_short]
+        self._dll.MCWaitForDigitalIO.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_short]
         self._dll.MCWaitForDigitalIO.restype = None
-        self._dll.MCWaitForEdge.argtypes = [HCTRLR, c_ushort, c_short]
-        self._dll.MCWaitForIndex.argtypes = [HCTRLR, c_ushort]
-        self._dll.MCWaitForPosition.argtypes = [HCTRLR, c_ushort, c_double]
+        self._dll.MCWaitForEdge.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_short]
+        self._dll.MCWaitForIndex.argtypes = [HCTRLR, ctypes.c_ushort]
+        self._dll.MCWaitForPosition.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
         self._dll.MCWaitForPosition.restype = None
-        self._dll.MCWaitForRelative.argtypes = [HCTRLR, c_ushort, c_double]
+        self._dll.MCWaitForRelative.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
         self._dll.MCWaitForRelative.restype = None
-        self._dll.MCWaitForStop.argtypes = [HCTRLR, c_ushort, c_double]
+        self._dll.MCWaitForStop.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
         self._dll.MCWaitForStop.restype = None
-        self._dll.MCWaitForTarget.argtypes = [HCTRLR, c_ushort, c_double]
+        self._dll.MCWaitForTarget.argtypes = [HCTRLR, ctypes.c_ushort, ctypes.c_double]
         self._dll.MCWaitForTarget.restype = None
 
-        self._dll.pmccmdex.argtypes = [HCTRLR, c_ushort, c_ushort, c_void_p, c_int]
+        self._dll.pmccmdex.argtypes = [
+            HCTRLR,
+            ctypes.c_ushort,
+            ctypes.c_ushort,
+            ctypes.c_void_p,
+            ctypes.c_int,
+        ]
         self._dll.pmccmdrpyex.argtypes = [
             HCTRLR,
-            c_ushort,
-            c_ushort,
-            c_void_p,
-            c_int,
-            c_void_p,
-            c_int,
+            ctypes.c_ushort,
+            ctypes.c_ushort,
+            ctypes.c_void_p,
+            ctypes.c_int,
+            ctypes.c_void_p,
+            ctypes.c_int,
         ]
         self._dll.pmcgetc.argtypes = [HCTRLR]
-        self._dll.pmcgetc.restype = c_short
-        self._dll.pmcgetramex.argtypes = [HCTRLR, c_uint, c_void_p, c_uint]
-        self._dll.pmcgets.argtypes = [HCTRLR, c_void_p, c_short]
-        self._dll.pmcgets.restype = c_short
-        self._dll.pmclock.argtypes = [HCTRLR, c_uint]
-        self._dll.pmclookupvar.argtypes = [HCTRLR, c_uint, c_char_p, POINTER(c_uint)]
-        self._dll.pmcputc.argtypes = [HCTRLR, c_short]
-        self._dll.pmcputc.restype = c_short
-        self._dll.pmcputramex.argtypes = [HCTRLR, c_uint, c_void_p, c_uint]
-        self._dll.pmcputs.argtypes = [HCTRLR, c_char_p]
-        self._dll.pmcputs.restype = c_short
+        self._dll.pmcgetc.restype = ctypes.c_short
+        self._dll.pmcgetramex.argtypes = [HCTRLR, ctypes.c_uint, ctypes.c_void_p, ctypes.c_uint]
+        self._dll.pmcgets.argtypes = [HCTRLR, ctypes.c_void_p, ctypes.c_short]
+        self._dll.pmcgets.restype = ctypes.c_short
+        self._dll.pmclock.argtypes = [HCTRLR, ctypes.c_uint]
+        self._dll.pmclookupvar.argtypes = [
+            HCTRLR,
+            ctypes.c_uint,
+            ctypes.c_char_p,
+            ctypes.POINTER(ctypes.c_uint),
+        ]
+        self._dll.pmcputc.argtypes = [HCTRLR, ctypes.c_short]
+        self._dll.pmcputc.restype = ctypes.c_short
+        self._dll.pmcputramex.argtypes = [HCTRLR, ctypes.c_uint, ctypes.c_void_p, ctypes.c_uint]
+        self._dll.pmcputs.argtypes = [HCTRLR, ctypes.c_char_p]
+        self._dll.pmcputs.restype = ctypes.c_short
         self._dll.pmcrdy.argtypes = [HCTRLR]
-        self._dll.pmcrdy.restype = c_short
-        self._dll.pmcrpyex.argtypes = [HCTRLR, c_void_p, c_uint]
+        self._dll.pmcrdy.restype = ctypes.c_short
+        self._dll.pmcrpyex.argtypes = [HCTRLR, ctypes.c_void_p, ctypes.c_uint]
         self._dll.pmcunlock.argtypes = [HCTRLR]
         self._dll.pmcunlock.restype = None
 
@@ -853,8 +1041,8 @@ class Mcapi:
 
     def BlockEnd(self):
         """End a block command sequence and transmit the compound command, task, macro, or contour path."""
-        task = c_int(0)
-        self.ProcessException(self._dll.MCBlockEnd(self._handle, byref(task)))
+        task = ctypes.c_int(0)
+        self.ProcessException(self._dll.MCBlockEnd(self._handle, ctypes.byref(task)))
         return task.value
 
     def CancelTask(self, task):
@@ -869,12 +1057,12 @@ class Mcapi:
         """Close the existing Motion Control API handle for this object."""
         if self._handle > 0:
             self._dll.MCClose(self._handle)
-            self._handle = c_short(0)
+            self._handle = ctypes.c_short(0)
 
     def ConfigureCompare(self, axis, values, num, inc, mode, period):
         """Configure axis high-speed position compare mode operation
 
-        Declare 'values' as values = c_double * n"""
+        Declare 'values' as values = ctypes.c_double * n"""
         self.ProcessException(
             self._dll.MCConfigureCompare(self._handle, axis, values, num.inc, mode, period)
         )
@@ -968,25 +1156,25 @@ class Mcapi:
 
     def GetAccelerationEx(self, axis):
         """Get the current programmed acceleration value for the given axis."""
-        accel = c_double(0)
+        accel = ctypes.c_double(0)
         self.ProcessException(self._dll.MCGetAccelerationEx(self._handle, axis, accel))
         return accel.value
 
     def GetAnalogEx(self, axis):
         """Get the current input state of an analog input channel."""
-        value = c_uint(0)
+        value = ctypes.c_uint(0)
         self.ProcessException(self._dll.MCGetAnalogEx(self._handle, axis, value))
         return value.value
 
     def GetAuxEncIdxEx(self, axis):
         """Get the position where the auxiliary encoder's index pulse was observed."""
-        index = c_double(0)
+        index = ctypes.c_double(0)
         self.ProcessException(self._dll.MCGetAuxEncIdxEx(self._handle, axis, index))
         return index.value
 
     def GetAuxEncPosEx(self, axis):
         """Get the current position of the auxiliary encoder."""
-        pos = c_double(0)
+        pos = ctypes.c_double(0)
         self.ProcessException(self._dll.MCGetAuxEncPosEx(self._handle, axis, pos))
         return pos.value
 
@@ -996,16 +1184,21 @@ class Mcapi:
 
     def GetBreakpointEx(self, axis):
         """Get the current axis breakpoint position."""
-        breakpoint = c_double(0)
+        breakpoint = ctypes.c_double(0)
         self.ProcessException(self._dll.MCGetBreakpointEx(self._handle, axis, breakpoint))
         return breakpoint.value
 
     def GetCaptureData(self, axis, type, start, points):
         """Get data collected by the most recent CaptureData() call."""
-        temp = (c_double * points)()
+        temp = (ctypes.c_double * points)()
         self.ProcessException(
             self._dll.MCGetCaptureData(
-                self._handle, axis, type, start, points, cast(temp, POINTER(c_double))
+                self._handle,
+                axis,
+                type,
+                start,
+                points,
+                ctypes.cast(temp, ctypes.POINTER(ctypes.c_double)),
             )
         )
         # convert data to a friendly python list
@@ -1021,10 +1214,10 @@ class Mcapi:
         """Get the current data recording settings for axis.
 
         Returns settings as tuple: (points, period, delay, index)"""
-        points = c_int()
-        period = c_double()
-        delay = c_double()
-        index = c_int()
+        points = ctypes.c_int()
+        period = ctypes.c_double()
+        delay = ctypes.c_double()
+        index = ctypes.c_int()
         self.ProcessException(
             self._dll.MCGetCaptureSettings(self._handle, axis, points, period, delay, index)
         )
@@ -1044,13 +1237,13 @@ class Mcapi:
 
         type is one of type MC_COUNT_CAPTURE, MC_COUNT_COMPARE, MC_COUNT_CONTOUR,
         MC_COUNT_FILTER, MC_COUNT_FILTERMAX, or MC_COUNT_RECORD"""
-        count = c_int(0)
+        count = ctypes.c_int(0)
         self.ProcessException(self._dll.MCGetCount(self._handle, axis, type, count))
         return count.value
 
     def GetDecelerationEx(self, axis):
         """Get the current programmed deceleration value for axis."""
-        decel = c_double(0)
+        decel = ctypes.c_double(0)
         self.ProcessException(self._dll.MCGetDecelerationEx(self._handle, axis, decel))
         return decel.value
 
@@ -1060,13 +1253,13 @@ class Mcapi:
 
     def GetDigitalIOConfig(self, channel):
         """Get the current configuration (in / out / high / low) of the a digital I/O channel."""
-        mode = c_ushort(0)
-        self.ProcessException(self._dll.MCGetDigitalIOConfig(self._handle, axis, mode))
+        mode = ctypes.c_ushort(0)
+        self.ProcessException(self._dll.MCGetDigitalIOConfig(self._handle, channel, mode))
         return mode.value
 
     def GetDigitalIOEx(self, channel):
         """Get the current state of the specified digital I/O channel."""
-        state = c_uint(0)
+        state = ctypes.c_uint(0)
         self.ProcessException(self._dll.MCGetDigitalIOEx(self._handle, channel, state))
         return state.value
 
@@ -1080,27 +1273,29 @@ class Mcapi:
 
     def GetFollowingError(self, axis):
         """Get the current axis following error."""
-        error = c_double(0)
+        error = ctypes.c_double(0)
         self.ProcessException(self._dll.MCGetFollowingError(self._handle, axis, error))
         return error.value
 
     def GetGain(self, axis):
         """Get the current gain setting for axis."""
-        gain = c_double(0)
+        gain = ctypes.c_double(0)
         self.ProcessException(self._dll.MCGetGain(self._handle, axis, gain))
         return gain.value
 
     def GetIndexEx(self, axis):
         """Get the position where the encoder index pulse was observed for axis."""
-        index = c_double(0)
+        index = ctypes.c_double(0)
         self.ProcessException(self._dll.MCGetIndexEx(self._handle, axis, index))
         return index.value
 
     def GetInstalledModules(self, size=16):
         """Enumerate the types of modules installed on a motion controller."""
-        temp = (c_long * size)()
+        temp = (ctypes.c_long * size)()
         self.ProcessException(
-            self._dll.MCGetInstalledModules(self._handle, cast(temp, POINTER(c_long)), size)
+            self._dll.MCGetInstalledModules(
+                self._handle, ctypes.cast(temp, ctypes.POINTER(ctypes.c_long)), size
+            )
         )
         # convert data to a friendly python list
         modules = []
@@ -1116,10 +1311,10 @@ class Mcapi:
         """Get the current hard and soft limit settings for axis.
 
         Returns settings as tuple: (hardlimitmode, softlimitmode, softlimitminus, softlimitplus)"""
-        hardlimitmode = c_short(0)
-        softlimitmode = c_short(0)
-        softlimitminus = c_double(0)
-        softlimitplus = c_double(0)
+        hardlimitmode = ctypes.c_short(0)
+        softlimitmode = ctypes.c_short(0)
+        softlimitminus = ctypes.c_double(0)
+        softlimitplus = ctypes.c_double(0)
         self.ProcessException(
             self._dll.MCGetLimits(
                 self._handle, axis, hardlimitmode, softlimitmode, softlimitminus, softlimitplus
@@ -1134,13 +1329,13 @@ class Mcapi:
 
     def GetModuleInputMode(self, axis):
         """Get the current input mode for axis."""
-        mode = c_int(0)
+        mode = ctypes.c_int(0)
         self.ProcessException(self._dll.MCGetModuleInputMode(self._handle, axis, mode))
         return mode.value
 
     def GetModuleOutputMode(self, axis):
         """Get the current output mode for axis."""
-        mode = c_ushort(0)
+        mode = ctypes.c_ushort(0)
         self.ProcessException(self._dll.MCGetModuleOutputMode(self._handle, axis, mode))
         return mode.value
 
@@ -1150,41 +1345,41 @@ class Mcapi:
 
     def GetOperatingMode(self, axis):
         """Get the current operating mode (position, velocity, gain, torque, etc.) for axis."""
-        mode = c_int(0)
+        mode = ctypes.c_int(0)
         self.ProcessException(self._dll.MCGetOperatingMode(self._handle, axis, mode))
         return mode.value
 
     def GetOptimalEx(self, axis):
         """Get the current optimal position from the trajectory generator for axis."""
-        optimal = c_double(0)
+        optimal = ctypes.c_double(0)
         self.ProcessException(self._dll.MCGetOptimalEx(self._handle, axis, optimal))
         return optimal.value
 
     def GetPositionEx(self, axis):
         """Get the current position for axis."""
-        pos = c_double(0)
+        pos = ctypes.c_double(0)
         self.ProcessException(self._dll.MCGetPositionEx(self._handle, axis, pos))
         return pos.value
 
     def GetProfile(self, axis):
         """Get the current acceleration/deceleration profile for axis."""
-        profile = c_ushort(0)
+        profile = ctypes.c_ushort(0)
         self.ProcessException(self._dll.MCGetProfile(self._handle, axis, profile))
         return profile.value
 
     def GetRegister(self, reg, type):
         """Get the value of the specified general purpose register."""
         if type == MC_TYPE_LONG:
-            temp = c_long(0)
+            temp = ctypes.c_long(0)
         elif type == MC_TYPE_FLOAT:
-            temp = c_float(0)
+            temp = ctypes.c_float(0)
         elif type == MC_TYPE_DOUBLE:
-            temp = c_double(0)
+            temp = ctypes.c_double(0)
         elif type == MC_TYPE_STRING:
-            temp = c_char(0)
+            temp = ctypes.c_char(0)
         else:
             raise McapiException(self.TranslateErrorEx(MCERR_CONSTANT))
-        self.ProcessException(self._dll.MCGetRegister(self._handle, reg, byref(temp), type))
+        self.ProcessException(self._dll.MCGetRegister(self._handle, reg, ctypes.byref(temp), type))
         return temp.value
 
     def GetScale(self, axis, scale):
@@ -1194,7 +1389,7 @@ class Mcapi:
 
     def GetServoOutputPhase(self, axis):
         """Get the current servo output phasing for axis."""
-        phase = c_ushort(0)
+        phase = ctypes.c_ushort(0)
         self.ProcessException(self._dll.MCGetServoOutputPhase(self._handle, axis, phase))
         return phase.value
 
@@ -1210,43 +1405,43 @@ class Mcapi:
 
     def GetTargetEx(self, axis):
         """Get the move target position for axis."""
-        target = c_double(0)
+        target = ctypes.c_double(0)
         self.ProcessException(self._dll.MCGetTargetEx(self._handle, axis, target))
         return target.value
 
     def GetTorque(self, axis):
         """Get the current torque setting for axis."""
-        torque = c_double(0)
+        torque = ctypes.c_double(0)
         self.ProcessException(self._dll.MCGetTorque(self._handle, axis, torque))
         return torque.value
 
     def GetTrajectoryRate(self, axis):
         """Get the current trajectory generator rate setting."""
-        rate = c_int(0)
+        rate = ctypes.c_int(0)
         self.ProcessException(self._dll.MCGetTrajectoryRate(self._handle, axis, rate))
         return rate.value
 
     def GetVectorVelocity(self, axis):
         """Get the current vector velocity for contouring mode."""
-        vel = c_double(0)
+        vel = ctypes.c_double(0)
         self.ProcessException(self._dll.MCGetVectorVelocity(self._handle, axis, vel))
         return vel.value
 
     def GetVelocityActual(self, axis):
         """Get the current actual velocity for axis."""
-        vel = c_double(0)
+        vel = ctypes.c_double(0)
         self.ProcessException(self._dll.MCGetVelocityActual(self._handle, axis, vel))
         return vel.value
 
     def GetVelocityEx(self, axis):
         """>Get the current programmed velocity for axis."""
-        vel = c_double(0)
+        vel = ctypes.c_double(0)
         self.ProcessException(self._dll.MCGetVelocityEx(self._handle, axis, vel))
         return vel.value
 
     def GetVelocityOverride(self, axis):
         """Get the current velocity override for axis."""
-        vo = c_double(0)
+        vo = ctypes.c_double(0)
         self.ProcessException(self._dll.MCGetVelocityOverride(self._handle, axis, vo))
         return vo.value
 
@@ -1333,7 +1528,7 @@ class Mcapi:
         """Insert a repeat command into a block command sequence."""
         self.ProcessException(self._dll.MCRepeat(self._handle, count))
 
-    def Reset(self, axis, distance):
+    def Reset(self, axis):
         """Perform a complete reset of axis or the controller."""
         self._dll.MCReset(self._handle, axis)
         self.ProcessException()
@@ -1358,7 +1553,7 @@ class Mcapi:
 
     def SetContourConfig(self, axis, contour):
         """Set the contouring configuration for axis."""
-        self._dll.MCSetContourConfig(self._handle, axis, byref(contour))
+        self._dll.MCSetContourConfig(self._handle, axis, ctypes.byref(contour))
         self.ProcessException()
 
     def SetDeceleration(self, axis, rate):
@@ -1421,16 +1616,16 @@ class Mcapi:
     def SetRegister(self, reg, value, type):
         """Set the value of the specified general purpose register."""
         if type == MC_TYPE_LONG:
-            temp = c_long(value)
+            temp = ctypes.c_long(value)
         elif type == MC_TYPE_FLOAT:
-            temp = c_float(value)
+            temp = ctypes.c_float(value)
         elif type == MC_TYPE_DOUBLE:
-            temp = c_double(value)
+            temp = ctypes.c_double(value)
         elif type == MC_TYPE_STRING:
-            temp = c_char(value)
+            temp = ctypes.c_char(value)
         else:
             raise McapiException(self.TranslateErrorEx(MCERR_CONSTANT))
-        self.ProcessException(self._dll.MCSetRegister(self._handle, reg, byref(temp), type))
+        self.ProcessException(self._dll.MCSetRegister(self._handle, reg, ctypes.byref(temp), type))
 
     def SetScale(self, axis, scale):
         """Set the scale factors for axis."""
@@ -1444,7 +1639,7 @@ class Mcapi:
 
     def SetTimeoutEx(self, timeout):
         """Set the MCAPI function timeout for a controller."""
-        old = c_double(0)
+        old = ctypes.c_double(0)
         self.ProcessException(self._dll.MCSetTimeoutEx(self._handle, timeout, old))
         return old.value
 
@@ -1476,7 +1671,7 @@ class Mcapi:
 
     def TranslateErrorEx(self, error):
         """Translate MCAPI numeric error codes into text."""
-        buffer = create_string_buffer(256)
+        buffer = ctypes.create_string_buffer(256)
         self._dll.MCTranslateErrorEx(error, buffer, 256)
         return buffer.value.decode()
 
@@ -1526,50 +1721,58 @@ class Mcapi:
         if type == MC_TYPE_NONE:
             arg = None
         elif type == MC_TYPE_REG:
-            arg = c_long(argument)
+            arg = ctypes.c_long(argument)
         elif type == MC_TYPE_LONG:
-            arg = c_long(argument)
+            arg = ctypes.c_long(argument)
         elif type == MC_TYPE_FLOAT:
-            arg = c_float(argument)
+            arg = ctypes.c_float(argument)
         elif type == MC_TYPE_DOUBLE:
-            arg = c_double(argument)
+            arg = ctypes.c_double(argument)
         elif type == MC_TYPE_STRING:
-            arg = c_char(argument)
+            arg = ctypes.c_char(argument)
         else:
             raise McapiException(self.TranslateErrorEx(MCERR_CONSTANT))
-        self.ProcessException(self._dll.pmccmdex(self._handle, axis, command, byref(arg), type))
+        self.ProcessException(
+            self._dll.pmccmdex(self._handle, axis, command, ctypes.byref(arg), type)
+        )
 
     def pmccmdrpyex(self, axis, command, argument, arg_type, rpy_type):
         """>Send a formatted binary command buffer to the controller and read a reply."""
         if arg_type == MC_TYPE_NONE:
             arg = None
         elif arg_type == MC_TYPE_REG:
-            arg = c_long(argument)
+            arg = ctypes.c_long(argument)
         elif arg_type == MC_TYPE_LONG:
-            arg = c_long(argument)
+            arg = ctypes.c_long(argument)
         elif arg_type == MC_TYPE_FLOAT:
-            arg = c_float(argument)
+            arg = ctypes.c_float(argument)
         elif arg_type == MC_TYPE_DOUBLE:
-            arg = c_double(argument)
+            arg = ctypes.c_double(argument)
         elif arg_type == MC_TYPE_STRING:
-            arg = c_char(argument)
+            arg = ctypes.c_char(argument)
         else:
             raise McapiException(self.TranslateErrorEx(MCERR_CONSTANT))
 
         if rpy_type == MC_TYPE_LONG:
-            rpy = c_long(0)
+            rpy = ctypes.c_long(0)
         elif rpy_type == MC_TYPE_FLOAT:
-            rpy = c_float(0)
+            rpy = ctypes.c_float(0)
         elif rpy_type == MC_TYPE_DOUBLE:
-            rpy = c_double(0)
+            rpy = ctypes.c_double(0)
         elif rpy_type == MC_TYPE_STRING:
-            rpy = c_char(0)
+            rpy = ctypes.c_char(0)
         else:
             raise McapiException(self.TranslateErrorEx(MCERR_CONSTANT))
 
         self.ProcessException(
             self._dll.pmccmdrpyex(
-                self._handle, axis, command, byref(arg), arg_type, byref(rpy), rpy_type
+                self._handle,
+                axis,
+                command,
+                ctypes.byref(arg),
+                arg_type,
+                ctypes.byref(rpy),
+                rpy_type,
             )
         )
         return rpy.value
@@ -1582,7 +1785,9 @@ class Mcapi:
 
     def pmcgetramex(self, offset, buffer, size):
         """Read directly from controller memory beginning at specific location."""
-        self.ProcessException(self._dll.pmcgetramex(self._handle, offset, byref(buffer), size))
+        self.ProcessException(
+            self._dll.pmcgetramex(self._handle, offset, ctypes.byref(buffer), size)
+        )
 
     def pmcgets(self, buffer, size):
         """Read a null-terminated ASCII string from the controller's ASCII interface."""
@@ -1606,7 +1811,9 @@ class Mcapi:
 
     def pmcputramex(self, offset, buffer, size):
         """Write data directly into the controller's memory at a specific location."""
-        self.ProcessException(self._dll.pmcputramex(self._handle, offset, byref(buffer), size))
+        self.ProcessException(
+            self._dll.pmcputramex(self._handle, offset, ctypes.byref(buffer), size)
+        )
 
     def pmcputs(self, buffer):
         """Write a NULL terminated command string to the controller ASCII interface.
@@ -1625,17 +1832,17 @@ class Mcapi:
     def pmcrpyex(self, type):
         """Read a binary reply from the controller."""
         if type == MC_TYPE_LONG:
-            rpy = c_long(0)
+            rpy = ctypes.c_long(0)
         elif type == MC_TYPE_FLOAT:
-            rpy = c_float(0)
+            rpy = ctypes.c_float(0)
         elif type == MC_TYPE_DOUBLE:
-            rpy = c_double(0)
+            rpy = ctypes.c_double(0)
         elif type == MC_TYPE_STRING:
-            rpy = c_char(0)
+            rpy = ctypes.c_char(0)
         else:
             raise McapiException(self.TranslateErrorEx(MCERR_CONSTANT))
 
-        self.ProcessException(self._dll.pmcrpyex(self._handle, byref(rpy), type))
+        self.ProcessException(self._dll.pmcrpyex(self._handle, ctypes.byref(rpy), type))
         return rpy.value
 
     def pmcunlock(self):

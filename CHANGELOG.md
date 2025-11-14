@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Changed
+- update `mcapi.py` (from PMC Corp.)
+
 ## [2025.11.0]
 
 ### Added
